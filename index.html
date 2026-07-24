@@ -12,6 +12,7 @@
   .step-dot.active { background:#0d9488; color:#fff; }
   .step-dot.done { background:#14b8a6; color:#fff; }
   .modal-overlay { background:rgba(15,23,42,.55); }
+  .quote-box { background:#f0fdfa; border:1px dashed #0d9488; border-radius:.75rem; padding:1rem; font-size:.875rem; color:#134e4a; white-space:pre-wrap; }
 </style>
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 antialiased">
@@ -83,7 +84,7 @@
     <div id="questSection" class="hidden max-w-3xl mx-auto space-y-5">
 
       <!-- 進度條 -->
-      <div class="bg-white rounded-2xl p-5 shadow-xl flex items-center justify-between gap-2" role="progressbar" aria-valuemin="1" aria-valuemax="5">
+      <div class="bg-white rounded-2xl p-5 shadow-xl flex items-center justify-between gap-2" role="progressbar" aria-valuemin="1" aria-valuemax="9">
         <div class="flex items-center gap-2 flex-wrap" id="stepDots"></div>
         <div class="text-right">
           <p class="text-xs text-slate-500 font-bold">累積經驗值</p>
@@ -91,55 +92,129 @@
         </div>
       </div>
 
-      <!-- Step 1：情境介紹 -->
+      <!-- Step 1：情境介紹 / 階段一總覽 -->
       <div class="quest-step bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-teal-600" data-step="1">
-        <h3 class="text-xl font-black text-teal-950 mb-3">📖 關卡一：情境任務</h3>
-        <p class="text-slate-700 leading-relaxed mb-4">你是車城在地小農，準備申請青創貸款。請運用兩套 AI 工具，完成一份漂亮的行政文件：先用 <b>Gemini</b> 生成經營計畫文字，再用 <b>Claude</b> 把它轉換成正式表格。</p>
+        <h3 class="text-xl font-black text-teal-950 mb-2">💼 核心任務：用雙 AI 破譯複雜行政表格（計畫書實戰心法）</h3>
+        <p class="text-lg font-black text-green-700 mb-3">🟢 階段一：基地架設與 Google 生態系跨載具實戰（Gemini 篇）</p>
+        <p class="text-slate-700 leading-relaxed mb-4">任務目標：熟練運用 Google 帳號與雲端硬碟整合，打通手機與電腦的檔案傳輸屏障，並體驗第一次文件生成的格式瓶頸。</p>
         <button onclick="goStep(2)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
       </div>
 
-      <!-- Step 2：Gemini 生成計畫 -->
-      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-blue-600" data-step="2">
-        <h3 class="text-xl font-black text-blue-900 mb-3">✨ 關卡二：用 Gemini 生成經營計畫</h3>
+      <!-- Step 2：步驟1 一鍵通關檢查 -->
+      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-green-600" data-step="2">
+        <h3 class="text-xl font-black text-green-900 mb-3">⚡ 步驟 1：一鍵通關檢查</h3>
+        <p class="text-sm font-bold text-slate-500 mb-1">任務目標</p>
+        <p class="text-slate-700 leading-relaxed mb-3">確認 AI 工具可用性。</p>
+        <p class="text-sm font-bold text-slate-500 mb-1">作法</p>
+        <p class="text-slate-700 leading-relaxed mb-4">學員登入官網（gemini.google.com），若因年齡限制卡關，直接到 Google「個人資訊」修改生日。</p>
+        <div class="flex gap-3 mt-3">
+          <button onclick="goStep(1)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(3, {}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+        </div>
+      </div>
+
+      <!-- Step 3：步驟2 跨載具神經網路——Google 雲端硬碟實操 -->
+      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-green-600" data-step="3">
+        <h3 class="text-xl font-black text-green-900 mb-3">⚡ 步驟 2：跨載具神經網路——Google 雲端硬碟實操（新增重點！）</h3>
+        <p class="text-sm font-bold text-slate-500 mb-1">任務目標</p>
+        <p class="text-slate-700 leading-relaxed mb-3">學會使用 Google 生態系進行跨裝置（手機到電腦）的行政資料傳輸，告別用 LINE 傳檔案的瑣碎步驟。</p>
+        <p class="text-sm font-bold text-slate-500 mb-1">作法</p>
+        <ol class="list-decimal list-inside text-slate-700 leading-relaxed mb-4 space-y-1">
+          <li>手機下載並打開「Google 雲端硬碟 App」，登入與電腦相同的 Google 帳號。</li>
+          <li>看見不懂的政府公文或申貸欄位時，直接用手機拍照，並點選分享、上傳至 Google 雲端硬碟的「青創專案」資料夾。</li>
+          <li>回到電腦前打開瀏覽器，資料夾已自動同步，不需再透過任何通訊軟體傳檔。</li>
+        </ol>
+        <div class="flex gap-3 mt-3">
+          <button onclick="goStep(2)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(4, {}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+        </div>
+      </div>
+
+      <!-- Step 4：步驟3 生態系整合——Gemini 直接讀取雲端影像 -->
+      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-green-600" data-step="4">
+        <h3 class="text-xl font-black text-green-900 mb-3">⚡ 步驟 3：生態系整合——Gemini 直接讀取雲端影像（新增重點！）</h3>
+        <p class="text-sm font-bold text-slate-500 mb-1">任務目標</p>
+        <p class="text-slate-700 leading-relaxed mb-3">體驗 Google 生態系免下載、免上傳的流暢感，讓 AI 直接讀取雲端檔案並解題。</p>
+        <p class="text-sm font-bold text-slate-500 mb-1">作法</p>
+        <p class="text-slate-700 leading-relaxed mb-3">在 Gemini 對話框中，利用內建的 Google 擴充功能（或點擊輸入框旁邊的「+」號 / 雲端硬碟圖示），直接選取剛才同步好的手機照片。</p>
+        <p class="text-sm font-bold text-slate-500 mb-1">關鍵指令</p>
+        <div class="quote-box mb-4">「我直接從 Google 雲端硬碟共享了這張申貸公文的照片。我是創業新手，請幫我用最白話的日常語言，解釋照片裡面的政府要求是什麼？我該去哪裡申請？」</div>
+        <div class="flex gap-3 mt-3">
+          <button onclick="goStep(3)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(5, {}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+        </div>
+      </div>
+
+      <!-- Step 5：步驟4 腦力激盪與收斂（實際呼叫 Gemini 產出經營計畫） -->
+      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-blue-600" data-step="5">
+        <h3 class="text-xl font-black text-blue-900 mb-3">⚡ 步驟 4：腦力激盪與收斂（產出 500 字企業經營計畫）</h3>
+        <p class="text-sm font-bold text-slate-500 mb-1">任務目標</p>
+        <p class="text-slate-700 leading-relaxed mb-3">透過對話將破碎的點子整理成結構化文字。</p>
+        <p class="text-sm font-bold text-slate-500 mb-1">作法</p>
+        <p class="text-slate-700 leading-relaxed mb-3">學員用快問快答的方式，把自己的創意告訴 Gemini，由 Gemini 收斂成符合申貸標準的精準文字。</p>
+        <p class="text-sm font-bold text-slate-500 mb-1">關鍵指令範例</p>
+        <div class="quote-box mb-4">「我想開一家小農咖啡廳。請扮演我的創業顧問，用一問一答的方式，幫我引導出計畫書第五章需要的『經營現況』與『市場分析』。最後請幫我自動整合，寫成一篇 500 字的企業經營計畫總結。」</div>
         <label for="geminiPrompt" class="block text-sm font-bold text-slate-700 mb-1">請描述你的產品與經營特色</label>
         <textarea id="geminiPrompt" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-3 mb-3" placeholder="例如：我想用車城洋蔥開發農創伴手禮..."></textarea>
         <button onclick="handleCallGemini()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">🪄 生成計畫</button>
         <div id="geminiLoading" class="hidden text-blue-600 font-bold mt-3">⏳ Gemini 生成中，請稍候...</div>
         <textarea id="geminiResult" rows="6" class="w-full border border-slate-300 rounded-lg px-4 py-3 mt-3" placeholder="生成結果會顯示在這裡，也可以自行修改"></textarea>
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(1)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
-          <button onclick="saveStepAndGo(3, {geminiResult: document.getElementById('geminiResult').value})" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+          <button onclick="goStep(4)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(6, {geminiResult: document.getElementById('geminiResult').value}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
         </div>
       </div>
 
-      <!-- Step 3：Claude 轉表格 -->
-      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-orange-500" data-step="3">
-        <h3 class="text-xl font-black text-orange-900 mb-3">📋 關卡三：用 Claude 轉換成表格</h3>
-        <p class="text-sm text-slate-600 mb-3">把上一關的計畫內容交給 Claude，請它整理成正式的貸款申請表格（Markdown 表格）。</p>
+      <!-- Step 6：步驟5 初次文件生成與格式瓶頸體驗（完成階段一） -->
+      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-green-600" data-step="6">
+        <h3 class="text-xl font-black text-green-900 mb-3">⚡ 步驟 5：初次文件生成與格式瓶頸體驗</h3>
+        <p class="text-sm font-bold text-slate-500 mb-1">任務目標</p>
+        <p class="text-slate-700 leading-relaxed mb-3">讓 Gemini 嘗試直接產出計畫書檔案，讓學員發現「格式錯亂」的痛點，建立引進 Claude 的動機。</p>
+        <p class="text-sm font-bold text-slate-500 mb-1">作法</p>
+        <p class="text-slate-700 leading-relaxed mb-3">命令 Gemini 直接將上述內容打包下載。</p>
+        <p class="text-sm font-bold text-slate-500 mb-1">關鍵指令</p>
+        <div class="quote-box mb-4">「請幫我把剛才討論出來的所有內容，直接導出成一份 Word 檔或文字區塊，並且要長得跟政府官方的表格欄位一模一樣。」</div>
+        <p class="text-slate-700 leading-relaxed mb-4">學員會發現：Gemini 雖然文字寫得好，但導出的檔案排版往往會跑掉、文字擠成一團，無法直接完美填入官方 PDF 裡。這時，就可以順理成章地引導學員：「別擔心，這就是為什麼我們接下來需要派出另一位格式大師——Claude！」</p>
+        <div class="flex gap-3 mt-3">
+          <button onclick="goStep(5)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="completeStageOne()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">🏆 完成階段一 →</button>
+        </div>
+      </div>
+
+      <!-- Step 7：階段二 精準格式組裝與填表（Claude 篇） -->
+      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-orange-500" data-step="7">
+        <h3 class="text-xl font-black text-orange-900 mb-2">🔵 階段二：精準格式組裝與填表（Claude 篇）</h3>
+        <p class="text-sm text-slate-600 mb-3">延續階段一的內容，引導學員用同一個 Google 帳號登入 Claude，把 Gemini 格式錯亂的內容，對照原始表格轉換成正式的貸款申請表格（Markdown 表格）。</p>
         <button onclick="handleCallClaude()" class="bg-orange-600 hover:bg-orange-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">📐 轉換成表格</button>
         <div id="claudeLoading" class="hidden text-orange-600 font-bold mt-3">⏳ Claude 整理中，請稍候...</div>
         <textarea id="claudeResult" rows="6" class="w-full border border-slate-300 rounded-lg px-4 py-3 mt-3 font-mono text-sm" placeholder="表格結果會顯示在這裡"></textarea>
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(2)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
-          <button onclick="saveStepAndGo(4, {claudeResult: document.getElementById('claudeResult').value})" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+          <button onclick="goStep(6)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(8, {claudeResult: document.getElementById('claudeResult').value})" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
         </div>
       </div>
 
-      <!-- Step 4：反思心得 -->
-      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-purple-600" data-step="4">
-        <h3 class="text-xl font-black text-purple-900 mb-3">💭 關卡四：反思心得</h3>
+      <!-- Step 8：反思心得 -->
+      <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-purple-600" data-step="8">
+        <h3 class="text-xl font-black text-purple-900 mb-3">💭 反思心得</h3>
         <label for="reflection" class="block text-sm font-bold text-slate-700 mb-1">這次雙 AI 協作跟自己一個人做行政文件，有什麼不一樣？</label>
         <textarea id="reflection" rows="4" class="w-full border border-slate-300 rounded-lg px-4 py-3" placeholder="寫下你的心得..."></textarea>
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(3)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="goStep(7)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
           <button onclick="finishQuest()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">🏁 完成闖關</button>
         </div>
       </div>
 
-      <!-- Step 5：完賽畫面 -->
-      <div class="quest-step hidden bg-white rounded-2xl p-8 shadow-xl border-t-8 border-green-600 text-center" data-step="5">
-        <h3 class="text-2xl font-black text-green-900 mb-3">🎉 恭喜完成闖關！</h3>
-        <p class="text-slate-600">你已成功體驗雙 AI 跨生態系行政自動化流程，累積經驗值已更新到教師主控台。</p>
+      <!-- Step 9：完賽畫面（學習護照：今日進度總結） -->
+      <div class="quest-step hidden bg-white rounded-2xl p-8 shadow-xl border-t-8 border-green-600 text-center" data-step="9">
+        <h3 class="text-2xl font-black text-green-900 mb-2">🎒 學習護照：今日進度總結</h3>
+        <p class="text-slate-700 leading-relaxed mb-4">太厲害了！加入 Google 雲端硬碟的跨載具整合後，這個工作流才真正展現了「數位轉型」的威力，你不再只是學單一 AI 工具，而是學會了一套完整的雲端行政自動化思維！護照進度已同步更新：</p>
+        <div class="text-left max-w-md mx-auto space-y-2 bg-green-50 rounded-xl p-5 border border-green-200">
+          <p class="text-slate-800"><span class="font-bold">✅ 完成任務：</span>成功通過《雙 AI 跨生態系行政自動化闖關》全部關卡</p>
+          <p class="text-slate-800"><span class="font-bold">⭐ 獲得經驗值：</span><span id="finalXpDisplay" class="font-black text-teal-700">0 XP</span></p>
+          <p class="text-slate-800"><span class="font-bold">👑 解鎖稱號：</span>雲端生態系架構師</p>
+          <p class="text-slate-800"><span class="font-bold">☁️ 獲得徽章：</span>雲端傳送門（獎勵完美串聯手機、雲端硬碟與 AI 的跨裝置操作）</p>
+        </div>
       </div>
     </div>
   </section>
@@ -199,6 +274,7 @@
 // 請到 GAS 專案「部署 > 管理部署作業」複製「網頁應用程式」網址，貼到下面：
 const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycby3i53qJgHR0JR0QyONkkojQQT8JySKxoRtIItBmwM0G2fCmzMGWv2SCc7wRBo0Z2C_yw/exec';
 
+const TOTAL_STEPS = 9;
 let currentStudent = null; // { date, name, currentStep, xp, isCompleted, geminiResult, claudeResult, reflection }
 let pendingTeacherSwitch = false;
 
@@ -309,7 +385,7 @@ function teacherLogout() {
 }
 
 // ============================================================
-// 學員登入 / 進度（只需姓名，日期自動帶入）
+// 學員登入 / 進度（姓名 + 可選日期）
 // ============================================================
 function todayStr() {
   const d = new Date();
@@ -333,15 +409,25 @@ function handleLogin() {
 function enterQuest() {
   document.getElementById('loginSection').classList.add('hidden');
   document.getElementById('questSection').classList.remove('hidden');
+  restoreFieldsFromServer();
   renderProgress();
   goStep(currentStudent.currentStep || 1, /*skipSave*/true);
+}
+
+// 把後端存回來的暫存內容（Gemini計畫/Claude表格/反思心得）灌回對應的 textarea，
+// 不論目前顯示在哪一關，元素都還在 DOM 裡，之後切換關卡時內容不會遺失。
+function restoreFieldsFromServer() {
+  if (!currentStudent) return;
+  if (currentStudent.geminiResult) document.getElementById('geminiResult').value = currentStudent.geminiResult;
+  if (currentStudent.claudeResult) document.getElementById('claudeResult').value = currentStudent.claudeResult;
+  if (currentStudent.reflection) document.getElementById('reflection').value = currentStudent.reflection;
 }
 
 function renderProgress() {
   document.getElementById('xpDisplay').textContent = (currentStudent.xp || 0) + ' XP';
   const dotsEl = document.getElementById('stepDots');
   dotsEl.innerHTML = '';
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= TOTAL_STEPS; i++) {
     const dot = document.createElement('div');
     dot.className = 'step-dot w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-slate-200 text-slate-500';
     if (i < currentStudent.currentStep) dot.classList.add('done');
@@ -360,9 +446,6 @@ function goStep(step, skipSave) {
     renderProgress();
     if (!skipSave) persistProgress({});
   }
-  if (step === 3 && currentStudent && currentStudent.geminiResult) {
-    document.getElementById('geminiResult').value = currentStudent.geminiResult;
-  }
 }
 
 function persistProgress(fieldData) {
@@ -380,22 +463,36 @@ function persistProgress(fieldData) {
   }).catch(() => showConnectionError());
 }
 
-function saveStepAndGo(nextStep, fieldData) {
-  currentStudent.xp = (currentStudent.xp || 0) + 100;
+// xpAmount 可省略，預設 +100；階段一的敘事型關卡用較小的 +50，
+// 完成階段一時另外用 completeStageOne() 給一次性大獎勵。
+function saveStepAndGo(nextStep, fieldData, xpAmount) {
+  currentStudent.xp = (currentStudent.xp || 0) + (xpAmount === undefined ? 100 : xpAmount);
   currentStudent.currentStep = nextStep;
   persistProgress(fieldData);
   renderProgress();
   goStep(nextStep, true);
 }
 
+// 完成《階段一：基地架設與 Google 生態系跨載具實戰》的專屬里程碑，
+// 給一次大量經驗值獎勵，並用彈跳訊息公告解鎖稱號與徽章。
+function completeStageOne() {
+  currentStudent.xp = (currentStudent.xp || 0) + 1000;
+  currentStudent.currentStep = 7;
+  persistProgress({});
+  renderProgress();
+  goStep(7, true);
+  showToast('🎉 解鎖稱號：👑雲端生態系架構師｜獲得徽章：☁️雲端傳送門（+1000 XP）', 'success');
+}
+
 function finishQuest() {
   const reflection = document.getElementById('reflection').value.trim();
   currentStudent.isCompleted = true;
   currentStudent.xp = (currentStudent.xp || 0) + 100;
-  currentStudent.currentStep = 5;
+  currentStudent.currentStep = 9;
   persistProgress({ reflection });
   renderProgress();
-  goStep(5, true);
+  document.getElementById('finalXpDisplay').textContent = currentStudent.xp + ' XP';
+  goStep(9, true);
   showToast('🎉 闖關完成！', 'success');
 }
 
@@ -410,7 +507,7 @@ function handleCallGemini() {
   const prompt = document.getElementById('geminiPrompt').value.trim();
   if (!prompt) { showToast('請先輸入描述', 'error'); return; }
   setBtnLoading('geminiLoading', true);
-  callGAS_POST({ action: 'callGemini', prompt: `請以青創貸款計畫的口吻，用約300字描述以下經營構想：${prompt}` })
+  callGAS_POST({ action: 'callGemini', prompt: `請扮演創業顧問，根據以下創業構想，直接生成一份約500字、口吻親切口語化的「經營現況」與「市場分析」總結，內容需符合青創貸款計畫書格式：${prompt}` })
     .then(res => {
       setBtnLoading('geminiLoading', false);
       if (!res.ok) { showToast(res.message || 'Gemini 呼叫失敗', 'error'); return; }
@@ -421,7 +518,7 @@ function handleCallGemini() {
 
 function handleCallClaude() {
   const planText = document.getElementById('geminiResult').value.trim();
-  if (!planText) { showToast('請先完成上一關的計畫內容', 'error'); return; }
+  if (!planText) { showToast('請先完成階段一的經營計畫內容', 'error'); return; }
   setBtnLoading('claudeLoading', true);
   callGAS_POST({ action: 'callClaude', prompt: `請將以下經營計畫整理成 Markdown 表格（欄位：項目、內容）：\n${planText}` })
     .then(res => {
@@ -469,7 +566,7 @@ function loadStudents() {
       const tr = document.createElement('tr');
       tr.className = 'border-b';
       tr.innerHTML = `<td class="p-2">${s.date}</td><td class="p-2">${s.name}</td>
-        <td class="p-2">${s.currentStep}/5</td><td class="p-2">${s.xp}</td>
+        <td class="p-2">${s.currentStep}/${TOTAL_STEPS}</td><td class="p-2">${s.xp}</td>
         <td class="p-2">${s.isCompleted ? '✅' : '—'}</td>
         <td class="p-2 max-w-xs truncate" title="${(s.reflection||'').replace(/"/g,'&quot;')}">${s.reflection || ''}</td>`;
       tbody.appendChild(tr);
@@ -496,8 +593,6 @@ window.addEventListener('DOMContentLoaded', () => {
   if (saved) {
     try {
       const { date, name } = JSON.parse(saved);
-      // 不再限制只能是今天：學員換一台裝置或隔天回來，只要姓名+日期跟之前存的一樣，
-      // 就自動幫他讀回暫存進度；日期不同則只預填欄位，讓學員自己確認要不要換日期。
       document.getElementById('inputName').value = name;
       document.getElementById('inputDate').value = date;
       callGAS_POST({ action: 'login', date, name }).then(res => {
