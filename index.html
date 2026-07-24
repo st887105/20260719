@@ -61,16 +61,20 @@
   <!-- ==================== 學員端畫面 ==================== -->
   <section id="studentView" class="space-y-6">
 
-    <!-- 登入區：只需姓名，日期由系統自動帶入 -->
+    <!-- 登入區：姓名 + 可選擇日期（方便讀取之前暫存的進度） -->
     <div id="loginSection" class="bg-white rounded-2xl p-6 md:p-8 shadow-xl max-w-xl mx-auto border-t-8 border-teal-600">
       <h3 class="text-xl md:text-2xl font-black text-teal-950 mb-3 flex items-center gap-2">🔑 建立學員電子護照</h3>
-      <p class="text-slate-600 text-sm leading-relaxed mb-6">輸入你的姓名即可開始闖關（系統會自動記錄今天的日期），並自動保存你的進度。</p>
+      <p class="text-slate-600 text-sm leading-relaxed mb-6">輸入你的姓名並確認日期即可開始闖關。日期預設為今天，如果你要繼續之前其他天的進度，可以改選那一天的日期。</p>
       <div class="space-y-4">
         <div>
           <label for="inputName" class="block text-sm font-bold text-slate-700 mb-1">你的姓名</label>
           <input id="inputName" type="text" class="w-full border border-slate-300 rounded-lg px-4 py-3 min-h-[44px] focus:border-teal-500" placeholder="例如：陳小美" onkeydown="if(event.key==='Enter') handleLogin()">
         </div>
-        <p class="text-xs text-slate-400">📅 今日日期：<span id="todayLabel" class="font-bold text-slate-500"></span></p>
+        <div>
+          <label for="inputDate" class="block text-sm font-bold text-slate-700 mb-1">闖關日期</label>
+          <input id="inputDate" type="date" class="w-full border border-slate-300 rounded-lg px-4 py-3 min-h-[44px] focus:border-teal-500" onkeydown="if(event.key==='Enter') handleLogin()">
+          <p class="text-xs text-slate-400 mt-1">預設為今天；若要接續之前某一天的暫存進度，改選那一天即可</p>
+        </div>
         <button id="btnLogin" onclick="handleLogin()" class="w-full bg-teal-700 hover:bg-teal-600 text-white font-bold py-3 rounded-lg shadow transition active:scale-95 min-h-[44px]">🚀 開始闖關</button>
       </div>
     </div>
@@ -193,7 +197,7 @@
 // 從來沒有被換成真正的 Web App URL。只要這行沒改對，
 // 所有 JSONP / POST 呼叫都會失敗 → 觸發連線失敗橫幅 → 所有按鈕被鎖死。
 // 請到 GAS 專案「部署 > 管理部署作業」複製「網頁應用程式」網址，貼到下面：
-const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
+const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycby3i53qJgHR0JR0QyONkkojQQT8JySKxoRtIItBmwM0G2fCmzMGWv2SCc7wRBo0Z2C_yw/exec';
 
 let currentStudent = null; // { date, name, currentStep, xp, isCompleted, geminiResult, claudeResult, reflection }
 let pendingTeacherSwitch = false;
@@ -314,8 +318,8 @@ function todayStr() {
 
 function handleLogin() {
   const name = document.getElementById('inputName').value.trim();
+  const date = document.getElementById('inputDate').value || todayStr();
   if (!name) { showToast('請輸入姓名', 'error'); return; }
-  const date = todayStr();
   callGAS_POST({ action: 'login', date, name })
     .then(res => {
       if (!res.ok) { showToast(res.message || '登入失敗', 'error'); return; }
@@ -477,7 +481,7 @@ function loadStudents() {
 // 初始化：偵測網域 + 嘗試自動登入
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('todayLabel').textContent = todayStr();
+  document.getElementById('inputDate').value = todayStr();
 
   const banner = document.getElementById('envBanner');
   if (location.hostname.includes('github.io')) {
@@ -492,12 +496,13 @@ window.addEventListener('DOMContentLoaded', () => {
   if (saved) {
     try {
       const { date, name } = JSON.parse(saved);
-      if (date === todayStr()) {
-        document.getElementById('inputName').value = name;
-        callGAS_POST({ action: 'login', date, name }).then(res => {
-          if (res.ok) { currentStudent = res.data; enterQuest(); }
-        }).catch(() => {});
-      }
+      // 不再限制只能是今天：學員換一台裝置或隔天回來，只要姓名+日期跟之前存的一樣，
+      // 就自動幫他讀回暫存進度；日期不同則只預填欄位，讓學員自己確認要不要換日期。
+      document.getElementById('inputName').value = name;
+      document.getElementById('inputDate').value = date;
+      callGAS_POST({ action: 'login', date, name }).then(res => {
+        if (res.ok) { currentStudent = res.data; enterQuest(); }
+      }).catch(() => {});
     } catch (e) { /* ignore corrupt cache */ }
   }
 });
