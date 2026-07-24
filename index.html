@@ -106,7 +106,32 @@
         <p class="text-sm font-bold text-slate-500 mb-1">任務目標</p>
         <p class="text-slate-700 leading-relaxed mb-3">確認 AI 工具可用性。</p>
         <p class="text-sm font-bold text-slate-500 mb-1">作法</p>
-        <p class="text-slate-700 leading-relaxed mb-4">學員登入官網（gemini.google.com），若因年齡限制卡關，直接到 Google「個人資訊」修改生日。</p>
+        <p class="text-slate-700 leading-relaxed mb-3">學員登入官網（gemini.google.com），若因年齡限制卡關，直接到 Google「個人資訊」修改生日。</p>
+        <a href="https://gemini.google.com" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px] mb-4">🔗 前往 Gemini 官網測試</a>
+
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4">
+          <p class="text-sm font-bold text-slate-700 mb-3">📛 卡在年齡限制？照著這 4 步驟修改生日：</p>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-3 text-center text-xs">
+            <div class="bg-white rounded-lg p-3 border border-slate-200">
+              <p class="text-2xl mb-1">1️⃣</p>
+              <p class="text-slate-600">打開 Google「個人資訊」頁面</p>
+            </div>
+            <div class="bg-white rounded-lg p-3 border border-slate-200">
+              <p class="text-2xl mb-1">2️⃣</p>
+              <p class="text-slate-600">找到「生日」欄位</p>
+            </div>
+            <div class="bg-white rounded-lg p-3 border border-slate-200">
+              <p class="text-2xl mb-1">✏️3️⃣</p>
+              <p class="text-slate-600">點擊鉛筆圖示編輯</p>
+            </div>
+            <div class="bg-white rounded-lg p-3 border border-slate-200">
+              <p class="text-2xl mb-1">4️⃣</p>
+              <p class="text-slate-600">改成 18 歲以上的年份並儲存</p>
+            </div>
+          </div>
+          <a href="https://myaccount.google.com/personal-info" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-blue-700 hover:text-blue-900 font-bold text-sm mt-3 underline">🔗 直接前往 Google 個人資訊頁面</a>
+        </div>
+
         <div class="flex gap-3 mt-3">
           <button onclick="goStep(1)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
           <button onclick="saveStepAndGo(3, {}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
@@ -124,6 +149,14 @@
           <li>看見不懂的政府公文或申貸欄位時，直接用手機拍照，並點選分享、上傳至 Google 雲端硬碟的「青創專案」資料夾。</li>
           <li>回到電腦前打開瀏覽器，資料夾已自動同步，不需再透過任何通訊軟體傳檔。</li>
         </ol>
+        <div class="bg-slate-50 border border-slate-200 rounded-xl p-4 mb-4">
+          <p class="text-sm font-bold text-slate-700 mb-3">📲 立即取得 Google 雲端硬碟：</p>
+          <div class="flex flex-wrap gap-3">
+            <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.docs" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-green-700 hover:bg-green-600 text-white font-bold text-sm px-4 py-2.5 rounded-lg min-h-[44px]">🤖 Android 下載</a>
+            <a href="https://apps.apple.com/app/google-drive/id507874739" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-slate-700 hover:bg-slate-600 text-white font-bold text-sm px-4 py-2.5 rounded-lg min-h-[44px]">🍎 iPhone 下載</a>
+            <a href="https://drive.google.com" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold text-sm px-4 py-2.5 rounded-lg min-h-[44px]">💻 電腦版雲端硬碟</a>
+          </div>
+        </div>
         <div class="flex gap-3 mt-3">
           <button onclick="goStep(2)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
           <button onclick="saveStepAndGo(4, {}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
@@ -154,11 +187,21 @@
         <p class="text-slate-700 leading-relaxed mb-3">學員用快問快答的方式，把自己的創意告訴 Gemini，由 Gemini 收斂成符合申貸標準的精準文字。</p>
         <p class="text-sm font-bold text-slate-500 mb-1">關鍵指令範例</p>
         <div class="quote-box mb-4">「我想開一家小農咖啡廳。請扮演我的創業顧問，用一問一答的方式，幫我引導出計畫書第五章需要的『經營現況』與『市場分析』。最後請幫我自動整合，寫成一篇 500 字的企業經營計畫總結。」</div>
-        <label for="geminiPrompt" class="block text-sm font-bold text-slate-700 mb-1">請描述你的產品與經營特色</label>
-        <textarea id="geminiPrompt" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-3 mb-3" placeholder="例如：我想用車城洋蔥開發農創伴手禮..."></textarea>
-        <button onclick="handleCallGemini()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">🪄 生成計畫</button>
-        <div id="geminiLoading" class="hidden text-blue-600 font-bold mt-3">⏳ Gemini 生成中，請稍候...</div>
-        <textarea id="geminiResult" rows="6" class="w-full border border-slate-300 rounded-lg px-4 py-3 mt-3" placeholder="生成結果會顯示在這裡，也可以自行修改"></textarea>
+        <a href="https://gemini.google.com" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px] mb-4">🔗 前往 Gemini 對話（貼上關鍵指令）</a>
+        <p class="text-xs text-slate-400 mb-4">完成對話後，把 Gemini 生成的 500 字經營計畫複製貼到下面「生成結果」欄位即可。</p>
+
+        <details class="mb-4">
+          <summary class="cursor-pointer text-sm font-bold text-slate-500">🪄 沒有 Gemini 帳號？點此使用系統代打生成（備用）</summary>
+          <div class="mt-3">
+            <label for="geminiPrompt" class="block text-sm font-bold text-slate-700 mb-1">請描述你的產品與經營特色</label>
+            <textarea id="geminiPrompt" rows="3" class="w-full border border-slate-300 rounded-lg px-4 py-3 mb-3" placeholder="例如：我想用車城洋蔥開發農創伴手禮..."></textarea>
+            <button onclick="handleCallGemini()" class="bg-blue-600 hover:bg-blue-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">🪄 生成計畫</button>
+            <div id="geminiLoading" class="hidden text-blue-600 font-bold mt-3">⏳ Gemini 生成中，請稍候...</div>
+          </div>
+        </details>
+
+        <label for="geminiResult" class="block text-sm font-bold text-slate-700 mb-1">生成結果（貼上或系統代打結果）</label>
+        <textarea id="geminiResult" rows="6" class="w-full border border-slate-300 rounded-lg px-4 py-3" placeholder="把 Gemini 產出的經營計畫貼在這裡，也可以自行修改"></textarea>
         <div class="flex gap-3 mt-3">
           <button onclick="goStep(4)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
           <button onclick="saveStepAndGo(6, {geminiResult: document.getElementById('geminiResult').value}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
@@ -184,10 +227,23 @@
       <!-- Step 7：階段二 精準格式組裝與填表（Claude 篇） -->
       <div class="quest-step hidden bg-white rounded-2xl p-6 md:p-8 shadow-xl border-t-8 border-orange-500" data-step="7">
         <h3 class="text-xl font-black text-orange-900 mb-2">🔵 階段二：精準格式組裝與填表（Claude 篇）</h3>
-        <p class="text-sm text-slate-600 mb-3">延續階段一的內容，引導學員用同一個 Google 帳號登入 Claude，把 Gemini 格式錯亂的內容，對照原始表格轉換成正式的貸款申請表格（Markdown 表格）。</p>
-        <button onclick="handleCallClaude()" class="bg-orange-600 hover:bg-orange-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">📐 轉換成表格</button>
-        <div id="claudeLoading" class="hidden text-orange-600 font-bold mt-3">⏳ Claude 整理中，請稍候...</div>
-        <textarea id="claudeResult" rows="6" class="w-full border border-slate-300 rounded-lg px-4 py-3 mt-3 font-mono text-sm" placeholder="表格結果會顯示在這裡"></textarea>
+        <p class="text-sm text-slate-600 mb-3">延續階段一的內容，引導學員用同一個 Google 帳號登入 Claude，把計畫內容連同原始 PDF 表格一起交給 Claude，直接輸出跟原本一模一樣格式的 PDF，不用再手動轉換成 Markdown 表格。</p>
+        <a href="https://claude.ai" target="_blank" rel="noopener" class="inline-flex items-center gap-2 bg-orange-600 hover:bg-orange-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px] mb-2">🔗 前往 Claude</a>
+        <p class="text-xs text-slate-500 mb-4">💡 第一次使用請直接點「用 Google 帳號繼續」註冊/登入，不需要另外設密碼。</p>
+
+        <p class="text-sm font-bold text-slate-500 mb-1">關鍵指令範例（連同原始 PDF 一起上傳給 Claude）</p>
+        <div class="quote-box mb-4">「這是我要申請的官方表格 PDF，還有我整理好的經營計畫內容：[貼上 Gemini 生成的計畫文字]。請你完全比照這份 PDF 原本的欄位、順序與版面，把我的計畫內容填進對應欄位，直接產生一份格式跟原 PDF 一模一樣的檔案給我，不需要另外做成表格。」</div>
+
+        <details class="mb-4">
+          <summary class="cursor-pointer text-sm font-bold text-slate-500">📐 沒有 Claude 帳號？點此使用系統代打轉換成表格（備用）</summary>
+          <div class="mt-3">
+            <button onclick="handleCallClaude()" class="bg-orange-600 hover:bg-orange-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">📐 轉換成表格</button>
+            <div id="claudeLoading" class="hidden text-orange-600 font-bold mt-3">⏳ Claude 整理中，請稍候...</div>
+          </div>
+        </details>
+
+        <label for="claudeResult" class="block text-sm font-bold text-slate-700 mb-1">結果紀錄（可貼上 Claude 輸出的重點，或系統代打結果）</label>
+        <textarea id="claudeResult" rows="6" class="w-full border border-slate-300 rounded-lg px-4 py-3 font-mono text-sm" placeholder="表格結果會顯示在這裡"></textarea>
         <div class="flex gap-3 mt-3">
           <button onclick="goStep(6)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
           <button onclick="saveStepAndGo(8, {claudeResult: document.getElementById('claudeResult').value})" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
