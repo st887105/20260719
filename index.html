@@ -11,6 +11,7 @@
   :focus-visible { outline:3px solid #0d9488 !important; outline-offset:2px !important; }
   .step-dot.active { background:#0d9488; color:#fff; }
   .step-dot.done { background:#14b8a6; color:#fff; }
+  .modal-overlay { background:rgba(15,23,42,.55); }
 </style>
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 antialiased">
@@ -18,8 +19,25 @@
 <!-- Toast 狀態播報元件 -->
 <div id="toastContainer" class="fixed top-5 right-5 z-50 space-y-3 pointer-events-none" aria-live="polite"></div>
 
-<!-- 連線失敗橫幅（車城標準） -->
-<div id="connection-error-banner" class="hidden bg-red-100 text-red-800 py-3 px-4 text-center font-bold" role="alert"></div>
+<!-- 連線失敗橫幅（車城標準，附重試按鈕，不再永久鎖死全站） -->
+<div id="connection-error-banner" class="hidden bg-red-100 text-red-800 py-3 px-4 text-center font-bold flex items-center justify-center gap-4 flex-wrap" role="alert">
+  <span id="connection-error-text">⚠️ 系統暫時無法連線，請確認網路後重新整理頁面。</span>
+  <button onclick="location.reload()" class="bg-red-700 hover:bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded-lg min-h-[36px]">🔄 重新整理</button>
+</div>
+
+<!-- ==================== 教師密碼驗證 Modal ==================== -->
+<div id="teacherPasswordModal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center px-4">
+  <div class="bg-white rounded-2xl p-6 md:p-8 shadow-2xl max-w-sm w-full border-t-8 border-amber-600">
+    <h3 class="text-xl font-black text-amber-900 mb-3 flex items-center gap-2">🔒 教師主控台驗證</h3>
+    <p class="text-slate-600 text-sm mb-4">請輸入教師密碼以進入主控台。</p>
+    <input id="teacherPasswordInput" type="password" class="w-full border border-slate-300 rounded-lg px-4 py-3 min-h-[44px] focus:border-amber-500" placeholder="請輸入密碼" onkeydown="if(event.key==='Enter') submitTeacherPassword()">
+    <p id="teacherPasswordError" class="hidden text-red-600 text-xs font-bold mt-2">密碼錯誤，請再試一次</p>
+    <div class="flex gap-3 mt-5">
+      <button onclick="closeTeacherPasswordModal()" class="flex-1 bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-2.5 rounded-lg min-h-[44px]">取消</button>
+      <button onclick="submitTeacherPassword()" class="flex-1 bg-amber-700 hover:bg-amber-600 text-white font-bold py-2.5 rounded-lg min-h-[44px]">確認進入</button>
+    </div>
+  </div>
+</div>
 
 <header class="bg-teal-800 text-white shadow-lg border-b border-teal-900">
   <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -43,19 +61,16 @@
   <!-- ==================== 學員端畫面 ==================== -->
   <section id="studentView" class="space-y-6">
 
-    <!-- 登入區 -->
+    <!-- 登入區：只需姓名，日期由系統自動帶入 -->
     <div id="loginSection" class="bg-white rounded-2xl p-6 md:p-8 shadow-xl max-w-xl mx-auto border-t-8 border-teal-600">
       <h3 class="text-xl md:text-2xl font-black text-teal-950 mb-3 flex items-center gap-2">🔑 建立學員電子護照</h3>
-      <p class="text-slate-600 text-sm leading-relaxed mb-6">輸入你的姓名與班級代碼即可開始闖關，系統會自動保存你的進度。</p>
+      <p class="text-slate-600 text-sm leading-relaxed mb-6">輸入你的姓名即可開始闖關（系統會自動記錄今天的日期），並自動保存你的進度。</p>
       <div class="space-y-4">
         <div>
           <label for="inputName" class="block text-sm font-bold text-slate-700 mb-1">你的姓名</label>
-          <input id="inputName" type="text" class="w-full border border-slate-300 rounded-lg px-4 py-3 min-h-[44px] focus:border-teal-500" placeholder="例如：陳小美">
+          <input id="inputName" type="text" class="w-full border border-slate-300 rounded-lg px-4 py-3 min-h-[44px] focus:border-teal-500" placeholder="例如：陳小美" onkeydown="if(event.key==='Enter') handleLogin()">
         </div>
-        <div>
-          <label for="inputCode" class="block text-sm font-bold text-slate-700 mb-1">班級代碼</label>
-          <input id="inputCode" type="text" class="w-full border border-slate-300 rounded-lg px-4 py-3 min-h-[44px] focus:border-teal-500" placeholder="向老師索取">
-        </div>
+        <p class="text-xs text-slate-400">📅 今日日期：<span id="todayLabel" class="font-bold text-slate-500"></span></p>
         <button id="btnLogin" onclick="handleLogin()" class="w-full bg-teal-700 hover:bg-teal-600 text-white font-bold py-3 rounded-lg shadow transition active:scale-95 min-h-[44px]">🚀 開始闖關</button>
       </div>
     </div>
@@ -129,12 +144,11 @@
   <section id="teacherView" class="hidden space-y-6">
 
     <div class="bg-white rounded-2xl p-6 shadow-xl border-t-8 border-amber-600">
-      <h3 class="text-xl font-black text-amber-900 mb-4">⚙️ 系統設定</h3>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-black text-amber-900">⚙️ 系統設定</h3>
+        <button onclick="teacherLogout()" class="text-xs font-bold text-amber-700 hover:text-amber-900 underline">🔒 登出教師模式</button>
+      </div>
       <div class="grid md:grid-cols-2 gap-4">
-        <div>
-          <label for="settingCode" class="block text-sm font-bold text-slate-700 mb-1">班級代碼</label>
-          <input id="settingCode" type="text" class="w-full border border-slate-300 rounded-lg px-4 py-3 min-h-[44px]">
-        </div>
         <div>
           <label for="settingQr" class="block text-sm font-bold text-slate-700 mb-1">學生端網址（用於產生 QR Code）</label>
           <input id="settingQr" type="text" class="w-full border border-slate-300 rounded-lg px-4 py-3 min-h-[44px]" placeholder="https://gg90052.github.io/ezpage/">
@@ -174,10 +188,15 @@
 // ============================================================
 // 全域設定
 // ============================================================
-// ⚠️ 每次 GAS 重新部署後，務必把新的 Web App URL 貼到這裡
+// ⚠️⚠️⚠️ 這裡是網頁「無法連線」最常見的原因！
+// 下面這行還是原始佔位字串 YOUR_SCRIPT_ID，代表 GAS 部署後的正式網址
+// 從來沒有被換成真正的 Web App URL。只要這行沒改對，
+// 所有 JSONP / POST 呼叫都會失敗 → 觸發連線失敗橫幅 → 所有按鈕被鎖死。
+// 請到 GAS 專案「部署 > 管理部署作業」複製「網頁應用程式」網址，貼到下面：
 const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec';
 
 let currentStudent = null; // { date, name, currentStep, xp, isCompleted, geminiResult, claudeResult, reflection }
+let pendingTeacherSwitch = false;
 
 // ============================================================
 // 車城標準：智慧路由通訊（JSONP 讀取 / Raw POST 寫入）
@@ -212,11 +231,12 @@ async function callGAS_POST(data) {
   return await res.json();
 }
 
+// 車城標準（優化版）：連線失敗只提示 + 提供重試按鈕，不再永久鎖死全站按鈕，
+// 避免一次背景請求失敗就讓老師/學生完全無法操作介面。
 function showConnectionError(msg) {
   const el = document.getElementById('connection-error-banner');
-  el.textContent = msg || '⚠️ 系統暫時無法連線，請確認網路後重新整理頁面。';
+  document.getElementById('connection-error-text').textContent = msg || '⚠️ 系統暫時無法連線，請確認網路後重新整理頁面。';
   el.classList.remove('hidden');
-  document.querySelectorAll('button').forEach(btn => btn.disabled = true);
 }
 
 function showToast(msg, type) {
@@ -230,9 +250,18 @@ function showToast(msg, type) {
 }
 
 // ============================================================
-// 畫面切換
+// 畫面切換 + 教師密碼保護
 // ============================================================
 function switchView(view) {
+  if (view === 'teacher' && sessionStorage.getItem('teacherAuth') !== 'true') {
+    pendingTeacherSwitch = true;
+    openTeacherPasswordModal();
+    return;
+  }
+  renderView(view);
+}
+
+function renderView(view) {
   document.getElementById('studentView').classList.toggle('hidden', view !== 'student');
   document.getElementById('teacherView').classList.toggle('hidden', view !== 'teacher');
   document.getElementById('btnStudentView').classList.toggle('bg-teal-600', view === 'student');
@@ -240,8 +269,43 @@ function switchView(view) {
   if (view === 'teacher') loadTeacherPanel();
 }
 
+function openTeacherPasswordModal() {
+  document.getElementById('teacherPasswordError').classList.add('hidden');
+  document.getElementById('teacherPasswordInput').value = '';
+  document.getElementById('teacherPasswordModal').classList.remove('hidden');
+  setTimeout(() => document.getElementById('teacherPasswordInput').focus(), 50);
+}
+
+function closeTeacherPasswordModal() {
+  document.getElementById('teacherPasswordModal').classList.add('hidden');
+  pendingTeacherSwitch = false;
+}
+
+function submitTeacherPassword() {
+  const password = document.getElementById('teacherPasswordInput').value;
+  if (!password) { showToast('請輸入密碼', 'error'); return; }
+  callGAS_POST({ action: 'verifyTeacherPassword', password })
+    .then(res => {
+      if (res.ok) {
+        sessionStorage.setItem('teacherAuth', 'true');
+        closeTeacherPasswordModal();
+        if (pendingTeacherSwitch) renderView('teacher');
+        pendingTeacherSwitch = false;
+      } else {
+        document.getElementById('teacherPasswordError').classList.remove('hidden');
+      }
+    })
+    .catch(() => showConnectionError('⚠️ 無法驗證密碼，請確認網路連線。'));
+}
+
+function teacherLogout() {
+  sessionStorage.removeItem('teacherAuth');
+  renderView('student');
+  showToast('已登出教師模式', 'success');
+}
+
 // ============================================================
-// 學員登入 / 進度
+// 學員登入 / 進度（只需姓名，日期自動帶入）
 // ============================================================
 function todayStr() {
   const d = new Date();
@@ -250,26 +314,16 @@ function todayStr() {
 
 function handleLogin() {
   const name = document.getElementById('inputName').value.trim();
-  const code = document.getElementById('inputCode').value.trim();
   if (!name) { showToast('請輸入姓名', 'error'); return; }
-
-  callGAS_JSONP({ action: 'getSettings' }, (err, settingsRes) => {
-    if (err) { showConnectionError(); return; }
-    const settings = settingsRes.data || {};
-    if (code && settings.classroomCode && code !== settings.classroomCode) {
-      showToast('班級代碼錯誤', 'error');
-      return;
-    }
-    const date = todayStr();
-    callGAS_POST({ action: 'login', date, name })
-      .then(res => {
-        if (!res.ok) { showToast(res.message || '登入失敗', 'error'); return; }
-        currentStudent = res.data;
-        localStorage.setItem('dualai_student', JSON.stringify({ date, name }));
-        enterQuest();
-      })
-      .catch(() => showConnectionError());
-  });
+  const date = todayStr();
+  callGAS_POST({ action: 'login', date, name })
+    .then(res => {
+      if (!res.ok) { showToast(res.message || '登入失敗', 'error'); return; }
+      currentStudent = res.data;
+      localStorage.setItem('dualai_student', JSON.stringify({ date, name }));
+      enterQuest();
+    })
+    .catch(() => showConnectionError());
 }
 
 function enterQuest() {
@@ -381,7 +435,6 @@ function loadTeacherPanel() {
   callGAS_JSONP({ action: 'getSettings' }, (err, res) => {
     if (err) { showConnectionError(); return; }
     const s = res.data || {};
-    document.getElementById('settingCode').value = s.classroomCode || '';
     document.getElementById('settingQr').value = '';
     document.getElementById('qrImg').src = s.qrCodeUrl || '';
   });
@@ -389,9 +442,8 @@ function loadTeacherPanel() {
 }
 
 function handleSaveSettings() {
-  const classroomCode = document.getElementById('settingCode').value.trim();
   const studentUrl = document.getElementById('settingQr').value.trim();
-  const settings = { classroomCode };
+  const settings = {};
   if (studentUrl) {
     settings.qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(studentUrl);
   }
@@ -425,6 +477,8 @@ function loadStudents() {
 // 初始化：偵測網域 + 嘗試自動登入
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('todayLabel').textContent = todayStr();
+
   const banner = document.getElementById('envBanner');
   if (location.hostname.includes('github.io')) {
     banner.textContent = '✅ 目前運行於 GitHub Pages 正式環境';
