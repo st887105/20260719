@@ -4,15 +4,286 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>雙 AI 跨生態系行政自動化闖關系統 - 車城國小徐吉德教師設計</title>
-<script src="https://cdn.tailwindcss.com"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
-  body { font-family:'Noto Sans TC', sans-serif; background-color:#f8fafc; }
-  :focus-visible { outline:3px solid #0d9488 !important; outline-offset:2px !important; }
-  .step-dot.active { background:#0d9488; color:#fff; }
-  .step-dot.done { background:#14b8a6; color:#fff; }
-  .modal-overlay { background:rgba(15,23,42,.55); }
-  .quote-box { background:#f0fdfa; border:1px dashed #0d9488; border-radius:.75rem; padding:1rem; font-size:.875rem; color:#134e4a; white-space:pre-wrap; }
+/* ============================================================
+   車城國小｜自建輕量 CSS（v2.0 起取代 cdn.tailwindcss.com）
+   ------------------------------------------------------------
+   原本載入的 Tailwind CDN 會在瀏覽器「即時編譯」整套 CSS，
+   正式站會跳 production 警告、拖慢首屏，且完全依賴外部服務。
+   這裡改為只保留本專案真正用到的 utility，class 名稱與 Tailwind
+   完全一致 → HTML 與 JS 一行都不用改，零建置流程、零外部依賴。
+
+   ⚠️ 維護重點：日後若在 HTML/JS 新增任何 Tailwind class，
+      必須回到這個區塊補上對應規則，否則樣式不會生效。
+   ============================================================ */
+
+/* ---------- 色票（對齊 Tailwind 官方色階） ---------- */
+:root{
+  --white:#fff;
+  --slate-50:#f8fafc;--slate-100:#f1f5f9;--slate-200:#e2e8f0;--slate-300:#cbd5e1;
+  --slate-400:#94a3b8;--slate-500:#64748b;--slate-600:#475569;--slate-700:#334155;--slate-800:#1e293b;
+  --teal-50:#f0fdfa;--teal-200:#99f6e4;--teal-400:#2dd4bf;--teal-500:#14b8a6;--teal-600:#0d9488;
+  --teal-700:#0f766e;--teal-800:#115e59;--teal-900:#134e4a;--teal-950:#042f2e;
+  --amber-50:#fffbeb;--amber-200:#fde68a;--amber-500:#f59e0b;--amber-600:#d97706;
+  --amber-700:#b45309;--amber-800:#92400e;--amber-900:#78350f;
+  --blue-500:#3b82f6;--blue-600:#2563eb;--blue-700:#1d4ed8;--blue-900:#1e3a8a;
+  --purple-50:#faf5ff;--purple-200:#e9d5ff;--purple-500:#a855f7;--purple-600:#9333ea;
+  --purple-700:#7e22ce;--purple-900:#581c87;
+  --green-50:#f0fdf4;--green-100:#dcfce7;--green-200:#bbf7d0;--green-600:#16a34a;
+  --green-700:#15803d;--green-800:#166534;--green-900:#14532d;
+  --red-100:#fee2e2;--red-600:#dc2626;--red-700:#b91c1c;--red-800:#991b1b;
+  --orange-500:#f97316;--orange-600:#ea580c;--orange-900:#7c2d12;
+}
+
+/* ---------- Reset ---------- */
+*,::before,::after{box-sizing:border-box;border:0 solid var(--slate-200);margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{font-family:'Noto Sans TC',system-ui,-apple-system,sans-serif;background-color:var(--slate-50);line-height:1.5}
+h1,h2,h3,h4{font-size:inherit;font-weight:inherit}
+ol,ul{list-style:none}
+a{color:inherit;text-decoration:inherit}
+button,input,select,textarea{font:inherit;color:inherit;background-color:transparent}
+button{cursor:pointer}
+img{display:block;max-width:100%}
+table{border-collapse:collapse}
+summary{cursor:pointer}
+:focus-visible{outline:3px solid var(--teal-600)!important;outline-offset:2px!important}
+
+/* ---------- 版面容器 ---------- */
+.container{width:100%;margin-left:auto;margin-right:auto}
+@media(min-width:640px){.container{max-width:640px}}
+@media(min-width:768px){.container{max-width:768px}}
+@media(min-width:1024px){.container{max-width:1024px}}
+@media(min-width:1280px){.container{max-width:1280px}}
+
+/* ---------- Display / Position ---------- */
+.block{display:block}
+.flex{display:flex}
+.inline-flex{display:inline-flex}
+.grid{display:grid}
+.fixed{position:fixed}
+.inset-0{top:0;right:0;bottom:0;left:0}
+.top-5{top:1.25rem}
+.right-5{right:1.25rem}
+.z-50{z-index:50}
+
+/* ---------- Flex / Grid ---------- */
+.flex-col{flex-direction:column}
+.flex-wrap{flex-wrap:wrap}
+.flex-1{flex:1 1 0%}
+.flex-grow{flex-grow:1}
+.shrink-0{flex-shrink:0}
+.items-center{align-items:center}
+.items-start{align-items:flex-start}
+.justify-between{justify-content:space-between}
+.justify-center{justify-content:center}
+.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.gap-2{gap:.5rem}.gap-2\.5{gap:.625rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}
+.space-y-1>*+*{margin-top:.25rem}
+.space-y-2>*+*{margin-top:.5rem}
+.space-y-3>*+*{margin-top:.75rem}
+.space-y-4>*+*{margin-top:1rem}
+.space-y-5>*+*{margin-top:1.25rem}
+.space-y-6>*+*{margin-top:1.5rem}
+
+/* ---------- 尺寸 ---------- */
+.w-8{width:2rem}.w-9{width:2.25rem}.w-28{width:7rem}.w-32{width:8rem}.w-full{width:100%}
+.h-2{height:.5rem}.h-8{height:2rem}.h-9{height:2.25rem}.h-28{height:7rem}.h-full{height:100%}
+.min-h-screen{min-height:100vh}
+.min-h-\[44px\]{min-height:44px}
+.min-h-\[36px\]{min-height:36px}
+.min-w-0{min-width:0}
+.max-h-full{max-height:100%}
+.max-w-xs{max-width:20rem}.max-w-sm{max-width:24rem}.max-w-md{max-width:28rem}
+.max-w-xl{max-width:36rem}.max-w-2xl{max-width:42rem}.max-w-3xl{max-width:48rem}
+
+/* ---------- 間距 ---------- */
+.mx-auto{margin-left:auto;margin-right:auto}
+.ml-1{margin-left:.25rem}
+.ml-2{margin-left:.5rem}
+.mb-0\.5{margin-bottom:.125rem}
+.mb-1{margin-bottom:.25rem}.mb-2{margin-bottom:.5rem}.mb-3{margin-bottom:.75rem}
+.mb-4{margin-bottom:1rem}.mb-5{margin-bottom:1.25rem}.mb-6{margin-bottom:1.5rem}
+.mt-1{margin-top:.25rem}.mt-2{margin-top:.5rem}.mt-3{margin-top:.75rem}
+.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}
+.p-2{padding:.5rem}.p-3{padding:.75rem}.p-3\.5{padding:.875rem}.p-4{padding:1rem}
+.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}
+.px-2{padding-left:.5rem;padding-right:.5rem}
+.px-3{padding-left:.75rem;padding-right:.75rem}
+.px-4{padding-left:1rem;padding-right:1rem}
+.px-5{padding-left:1.25rem;padding-right:1.25rem}
+.px-6{padding-left:1.5rem;padding-right:1.5rem}
+.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}
+.py-1{padding-top:.25rem;padding-bottom:.25rem}
+.py-1\.5{padding-top:.375rem;padding-bottom:.375rem}
+.py-2{padding-top:.5rem;padding-bottom:.5rem}
+.py-2\.5{padding-top:.625rem;padding-bottom:.625rem}
+.py-3{padding-top:.75rem;padding-bottom:.75rem}
+.py-4{padding-top:1rem;padding-bottom:1rem}
+.py-6{padding-top:1.5rem;padding-bottom:1.5rem}
+.py-8{padding-top:2rem;padding-bottom:2rem}
+.py-10{padding-top:2.5rem;padding-bottom:2.5rem}
+.pl-4{padding-left:1rem}
+.pt-3{padding-top:.75rem}
+
+/* ---------- 文字 ---------- */
+.text-xs{font-size:.75rem;line-height:1rem}
+.text-sm{font-size:.875rem;line-height:1.25rem}
+.text-base{font-size:1rem;line-height:1.5rem}
+.text-lg{font-size:1.125rem;line-height:1.75rem}
+.text-xl{font-size:1.25rem;line-height:1.75rem}
+.text-2xl{font-size:1.5rem;line-height:2rem}
+.text-3xl{font-size:1.875rem;line-height:2.25rem}
+.font-medium{font-weight:500}.font-bold{font-weight:700}.font-black{font-weight:900}
+.font-mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,'Courier New',monospace}
+.leading-none{line-height:1}
+.leading-relaxed{line-height:1.625}
+.tracking-wide{letter-spacing:.025em}
+.text-center{text-align:center}.text-left{text-align:left}.text-right{text-align:right}
+.underline{text-decoration-line:underline}
+.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.break-words{overflow-wrap:break-word}
+.break-all{word-break:break-all}
+.whitespace-nowrap{white-space:nowrap}
+.whitespace-pre-wrap{white-space:pre-wrap}
+.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+.list-decimal{list-style-type:decimal}
+.list-disc{list-style-type:disc}
+.list-none{list-style-type:none}
+.list-inside{list-style-position:inside}
+.cursor-pointer{cursor:pointer}
+
+/* ---------- 文字色 ---------- */
+.text-white{color:var(--white)}
+.text-slate-300{color:var(--slate-300)}.text-slate-400{color:var(--slate-400)}
+.text-slate-500{color:var(--slate-500)}.text-slate-600{color:var(--slate-600)}
+.text-slate-700{color:var(--slate-700)}.text-slate-800{color:var(--slate-800)}
+.text-teal-200{color:var(--teal-200)}.text-teal-700{color:var(--teal-700)}
+.text-teal-800{color:var(--teal-800)}.text-teal-900{color:var(--teal-900)}.text-teal-950{color:var(--teal-950)}
+.text-amber-700{color:var(--amber-700)}.text-amber-800{color:var(--amber-800)}.text-amber-900{color:var(--amber-900)}
+.text-blue-600{color:var(--blue-600)}.text-blue-700{color:var(--blue-700)}.text-blue-900{color:var(--blue-900)}
+.text-green-700{color:var(--green-700)}.text-green-800{color:var(--green-800)}.text-green-900{color:var(--green-900)}
+.text-purple-700{color:var(--purple-700)}.text-purple-900{color:var(--purple-900)}
+.text-orange-600{color:var(--orange-600)}.text-orange-900{color:var(--orange-900)}
+.text-red-600{color:var(--red-600)}.text-red-800{color:var(--red-800)}
+
+/* ---------- 背景色 ---------- */
+.bg-white{background-color:var(--white)}
+.bg-slate-50{background-color:var(--slate-50)}.bg-slate-100{background-color:var(--slate-100)}
+.bg-slate-200{background-color:var(--slate-200)}.bg-slate-700{background-color:var(--slate-700)}
+.bg-teal-50{background-color:var(--teal-50)}
+.bg-teal-50\/60{background-color:rgba(240,253,250,.6)}
+.bg-teal-500{background-color:var(--teal-500)}.bg-teal-600{background-color:var(--teal-600)}
+.bg-teal-700{background-color:var(--teal-700)}.bg-teal-800{background-color:var(--teal-800)}
+.bg-amber-50{background-color:var(--amber-50)}.bg-amber-700{background-color:var(--amber-700)}
+.bg-blue-600{background-color:var(--blue-600)}
+.bg-green-50{background-color:var(--green-50)}.bg-green-100{background-color:var(--green-100)}
+.bg-green-700{background-color:var(--green-700)}
+.bg-purple-50{background-color:var(--purple-50)}.bg-purple-600{background-color:var(--purple-600)}
+.bg-orange-600{background-color:var(--orange-600)}
+.bg-red-100{background-color:var(--red-100)}.bg-red-700{background-color:var(--red-700)}
+
+/* ---------- 邊框 ---------- */
+.border{border-width:1px}
+.border-2{border-width:2px}
+.border-b{border-bottom-width:1px}
+.border-t{border-top-width:1px}
+.border-t-8{border-top-width:8px}
+.border-l-2{border-left-width:2px}
+.border-l-4{border-left-width:4px}
+.border-slate-100{border-color:var(--slate-100)}.border-slate-200{border-color:var(--slate-200)}
+.border-slate-300{border-color:var(--slate-300)}
+.border-teal-200{border-color:var(--teal-200)}.border-teal-600{border-color:var(--teal-600)}
+.border-teal-900{border-color:var(--teal-900)}
+.border-amber-200{border-color:var(--amber-200)}.border-amber-500{border-color:var(--amber-500)}
+.border-amber-600{border-color:var(--amber-600)}
+.border-blue-600{border-color:var(--blue-600)}
+.border-green-200{border-color:var(--green-200)}.border-green-600{border-color:var(--green-600)}
+.border-purple-200{border-color:var(--purple-200)}.border-purple-600{border-color:var(--purple-600)}
+.border-orange-500{border-color:var(--orange-500)}
+.rounded-lg{border-radius:.5rem}.rounded-xl{border-radius:.75rem}
+.rounded-2xl{border-radius:1rem}.rounded-full{border-radius:9999px}
+
+/* ---------- 陰影 / 其他 ---------- */
+.shadow{box-shadow:0 1px 3px rgba(0,0,0,.1),0 1px 2px rgba(0,0,0,.06)}
+.shadow-sm{box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.shadow-md{box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06)}
+.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05)}
+.shadow-xl{box-shadow:0 20px 25px -5px rgba(0,0,0,.1),0 10px 10px -5px rgba(0,0,0,.04)}
+.shadow-2xl{box-shadow:0 25px 50px -12px rgba(0,0,0,.25)}
+.overflow-hidden{overflow:hidden}
+.overflow-x-auto{overflow-x:auto}
+.overflow-y-auto{overflow-y:auto}
+.pointer-events-none{pointer-events:none}
+.pointer-events-auto{pointer-events:auto}
+.transform{transform:translate(0,0)}
+.transition{transition-property:color,background-color,border-color,fill,stroke,opacity,box-shadow,transform,filter;transition-duration:.15s;transition-timing-function:cubic-bezier(.4,0,.2,1)}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border-width:0}
+
+/* ---------- hover / focus / active ---------- */
+.hover\:bg-teal-50:hover{background-color:var(--teal-50)}
+.hover\:bg-teal-500:hover{background-color:var(--teal-500)}
+.hover\:bg-teal-600:hover{background-color:var(--teal-600)}
+.hover\:bg-slate-300:hover{background-color:var(--slate-300)}
+.hover\:bg-slate-600:hover{background-color:var(--slate-600)}
+.hover\:bg-amber-600:hover{background-color:var(--amber-600)}
+.hover\:bg-blue-500:hover{background-color:var(--blue-500)}
+.hover\:bg-green-600:hover{background-color:var(--green-600)}
+.hover\:bg-purple-500:hover{background-color:var(--purple-500)}
+.hover\:bg-orange-500:hover{background-color:var(--orange-500)}
+.hover\:bg-red-600:hover{background-color:var(--red-600)}
+.hover\:text-slate-700:hover{color:var(--slate-700)}
+.hover\:text-teal-900:hover{color:var(--teal-900)}
+.hover\:text-amber-900:hover{color:var(--amber-900)}
+.hover\:text-blue-900:hover{color:var(--blue-900)}
+.hover\:border-teal-400:hover{border-color:var(--teal-400)}
+.hover\:shadow-md:hover{box-shadow:0 4px 6px -1px rgba(0,0,0,.1),0 2px 4px -1px rgba(0,0,0,.06)}
+.hover\:shadow-lg:hover{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05)}
+.focus\:border-teal-500:focus{border-color:var(--teal-500)}
+.focus\:border-amber-500:focus{border-color:var(--amber-500)}
+.focus\:ring-teal-400:focus{--ring-color:var(--teal-400)}
+.focus\:ring-amber-500:focus{--ring-color:var(--amber-500)}
+.focus\:ring-2:focus{box-shadow:0 0 0 2px var(--ring-color,var(--teal-400))}
+.active\:scale-95:active{transform:scale(.95)}
+
+/* ---------- 響應式 ---------- */
+@media(min-width:640px){
+  .sm\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(min-width:768px){
+  .md\:flex-row{flex-direction:row}
+  .md\:justify-start{justify-content:flex-start}
+  .md\:text-left{text-align:left}
+  .md\:text-sm{font-size:.875rem;line-height:1.25rem}
+  .md\:text-2xl{font-size:1.5rem;line-height:2rem}
+  .md\:text-3xl{font-size:1.875rem;line-height:2.25rem}
+  .md\:p-8{padding:2rem}
+  .md\:grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .md\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(min-width:1024px){
+  .lg\:grid-cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+
+/* ---------- 專案自訂元件 ---------- */
+.step-dot{transition:transform .15s,filter .15s}
+.step-dot.active{background:var(--teal-600);color:#fff}
+.step-dot.done{background:var(--teal-500);color:#fff}
+.step-dot.cursor-pointer:hover{filter:brightness(1.15);transform:scale(1.08)}
+.modal-overlay{background:rgba(15,23,42,.55)}
+.quote-box{background:var(--teal-50);border:1px dashed var(--teal-600);border-radius:.75rem;padding:1rem;font-size:.875rem;color:var(--teal-900);white-space:pre-wrap}
+.clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.clamp-4{display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+.view-btn.active{background:var(--teal-600);color:#fff}
+.version-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35)}
+.version-badge:hover{background:rgba(255,255,255,.3)}
+
+/* ⚠️ .hidden 必須放在所有 display utility 之後，
+   否則 "hidden flex" / "hidden grid" 這類組合會蓋不掉 display。 */
+.hidden{display:none}
 </style>
 </head>
 <body class="min-h-screen flex flex-col text-slate-800 antialiased">
@@ -40,11 +311,46 @@
   </div>
 </div>
 
+<!-- ==================== 版本紀錄 Modal ==================== -->
+<div id="changelogModal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center px-4 py-8" onclick="if(event.target===this) closeChangelogModal()">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-xl w-full border-t-8 border-teal-600 max-h-full overflow-y-auto">
+    <div class="p-6 md:p-8">
+      <div class="flex justify-between items-start gap-4 mb-4">
+        <div>
+          <h3 class="text-2xl font-black text-teal-950">📜 版本更新紀錄</h3>
+          <p id="changelogCurrent" class="text-sm text-slate-500 font-bold mt-1"></p>
+        </div>
+        <button onclick="closeChangelogModal()" aria-label="關閉" class="text-slate-400 hover:text-slate-700 text-3xl leading-none font-black px-2">&times;</button>
+      </div>
+      <div id="changelogBody" class="space-y-3"></div>
+      <button onclick="closeChangelogModal()" class="mt-6 w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 rounded-lg min-h-[44px]">關閉</button>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== 學員回答詳情 Modal（清單/圖卡點擊後放大） ==================== -->
+<div id="detailModal" class="hidden fixed inset-0 z-50 modal-overlay flex items-center justify-center px-4 py-8" onclick="if(event.target===this) closeDetailModal()">
+  <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full border-t-8 border-teal-600 max-h-full overflow-y-auto">
+    <div class="p-6 md:p-8">
+      <div class="flex justify-between items-start gap-4 mb-4">
+        <div>
+          <h3 id="detailTitle" class="text-2xl font-black text-teal-950"></h3>
+          <p id="detailMeta" class="text-sm text-slate-500 font-bold mt-1"></p>
+        </div>
+        <button onclick="closeDetailModal()" aria-label="關閉" class="text-slate-400 hover:text-slate-700 text-3xl leading-none font-black px-2">&times;</button>
+      </div>
+      <div id="detailBody" class="space-y-4"></div>
+      <button onclick="closeDetailModal()" class="mt-6 w-full bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 rounded-lg min-h-[44px]">關閉</button>
+    </div>
+  </div>
+</div>
+
 <header class="bg-teal-800 text-white shadow-lg border-b border-teal-900">
   <div class="container mx-auto px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
     <div class="text-center md:text-left">
       <h1 class="text-2xl md:text-3xl font-black tracking-wide flex flex-wrap items-center justify-center md:justify-start gap-2">
         <span role="img" aria-label="robot">🤖</span> 雙 AI 跨生態系行政自動化闖關系統
+        <button id="versionBadge" onclick="openChangelogModal()" class="version-badge text-xs font-bold px-2 py-1 rounded-lg transition" title="查看版本更新紀錄"></button>
       </h1>
       <p class="text-teal-200 text-xs md:text-sm mt-1 font-medium">設計開發：車城國小 徐吉德教師 (無障礙 AA / 完全響應式 RWD 規格)</p>
     </div>
@@ -83,9 +389,9 @@
     <!-- 闖關主畫面（登入後顯示） -->
     <div id="questSection" class="hidden max-w-3xl mx-auto space-y-5">
 
-      <!-- 進度條 -->
-      <div class="bg-white rounded-2xl p-5 shadow-xl flex items-center justify-between gap-2" role="progressbar" aria-valuemin="1" aria-valuemax="9">
-        <div class="flex items-center gap-2 flex-wrap" id="stepDots"></div>
+      <!-- 進度條（圓點可點擊回顧已完成的關卡） -->
+      <div class="bg-white rounded-2xl p-5 shadow-xl flex items-center justify-between gap-2">
+        <div class="flex items-center gap-2 flex-wrap" id="stepDots" role="progressbar" aria-valuemin="1" aria-valuemax="9" aria-valuenow="1" aria-label="闖關進度，可點擊圓點回顧已完成的關卡"></div>
         <div class="text-right">
           <p class="text-xs text-slate-500 font-bold">累積經驗值</p>
           <p id="xpDisplay" class="text-2xl font-black text-teal-700">0 XP</p>
@@ -97,7 +403,7 @@
         <h3 class="text-xl font-black text-teal-950 mb-2">💼 核心任務：用雙 AI 破譯複雜行政表格（計畫書實戰心法）</h3>
         <p class="text-lg font-black text-green-700 mb-3">🟢 階段一：基地架設與 Google 生態系跨載具實戰（Gemini 篇）</p>
         <p class="text-slate-700 leading-relaxed mb-4">任務目標：熟練運用 Google 帳號與雲端硬碟整合，打通手機與電腦的檔案傳輸屏障，並體驗第一次文件生成的格式瓶頸。</p>
-        <button onclick="goStep(2)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+        <button onclick="saveStepAndGo(2, 0)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
       </div>
 
       <!-- Step 2：步驟1 一鍵通關檢查 -->
@@ -133,8 +439,8 @@
         </div>
 
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(1)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
-          <button onclick="saveStepAndGo(3, {}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+          <button onclick="goStep(1, true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(3, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
         </div>
       </div>
 
@@ -158,8 +464,8 @@
           </div>
         </div>
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(2)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
-          <button onclick="saveStepAndGo(4, {}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+          <button onclick="goStep(2, true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(4, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
         </div>
       </div>
 
@@ -173,8 +479,8 @@
         <p class="text-sm font-bold text-slate-500 mb-1">關鍵指令</p>
         <div class="quote-box mb-4">「我直接從 Google 雲端硬碟共享了這張申貸公文的照片。我是創業新手，請幫我用最白話的日常語言，解釋照片裡面的政府要求是什麼？我該去哪裡申請？」</div>
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(3)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
-          <button onclick="saveStepAndGo(5, {}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+          <button onclick="goStep(3, true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(5, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
         </div>
       </div>
 
@@ -203,8 +509,8 @@
         <label for="geminiResult" class="block text-sm font-bold text-slate-700 mb-1">生成結果（貼上或系統代打結果）</label>
         <textarea id="geminiResult" rows="6" class="w-full border border-slate-300 rounded-lg px-4 py-3" placeholder="把 Gemini 產出的經營計畫貼在這裡，也可以自行修改"></textarea>
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(4)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
-          <button onclick="saveStepAndGo(6, {geminiResult: document.getElementById('geminiResult').value}, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+          <button onclick="goStep(4, true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(6, 50)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
         </div>
       </div>
 
@@ -219,7 +525,7 @@
         <div class="quote-box mb-4">「請幫我把剛才討論出來的所有內容，直接導出成一份 Word 檔或文字區塊，並且要長得跟政府官方的表格欄位一模一樣。」</div>
         <p class="text-slate-700 leading-relaxed mb-4">學員會發現：Gemini 雖然文字寫得好，但導出的檔案排版往往會跑掉、文字擠成一團，無法直接完美填入官方 PDF 裡。這時，就可以順理成章地引導學員：「別擔心，這就是為什麼我們接下來需要派出另一位格式大師——Claude！」</p>
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(5)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="goStep(5, true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
           <button onclick="completeStageOne()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">🏆 完成階段一 →</button>
         </div>
       </div>
@@ -245,8 +551,8 @@
         <label for="claudeResult" class="block text-sm font-bold text-slate-700 mb-1">結果紀錄（可貼上 Claude 輸出的重點，或系統代打結果）</label>
         <textarea id="claudeResult" rows="6" class="w-full border border-slate-300 rounded-lg px-4 py-3 font-mono text-sm" placeholder="表格結果會顯示在這裡"></textarea>
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(6)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
-          <button onclick="saveStepAndGo(8, {claudeResult: document.getElementById('claudeResult').value})" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
+          <button onclick="goStep(6, true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="saveStepAndGo(8)" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">下一關 →</button>
         </div>
       </div>
 
@@ -256,7 +562,7 @@
         <label for="reflection" class="block text-sm font-bold text-slate-700 mb-1">這次雙 AI 協作跟自己一個人做行政文件，有什麼不一樣？</label>
         <textarea id="reflection" rows="4" class="w-full border border-slate-300 rounded-lg px-4 py-3" placeholder="寫下你的心得..."></textarea>
         <div class="flex gap-3 mt-3">
-          <button onclick="goStep(7)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
+          <button onclick="goStep(7, true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 上一關</button>
           <button onclick="finishQuest()" class="bg-purple-600 hover:bg-purple-500 text-white font-bold px-5 py-2.5 rounded-lg min-h-[44px]">🏁 完成闖關</button>
         </div>
       </div>
@@ -270,6 +576,11 @@
           <p class="text-slate-800"><span class="font-bold">⭐ 獲得經驗值：</span><span id="finalXpDisplay" class="font-black text-teal-700">0 XP</span></p>
           <p class="text-slate-800"><span class="font-bold">👑 解鎖稱號：</span>雲端生態系架構師</p>
           <p class="text-slate-800"><span class="font-bold">☁️ 獲得徽章：</span>雲端傳送門（獎勵完美串聯手機、雲端硬碟與 AI 的跨裝置操作）</p>
+        </div>
+        <p class="text-xs text-slate-500 mt-5">完賽後仍可回頭補充或修改任何一關的內容，經驗值不會被扣掉。</p>
+        <div class="flex gap-3 mt-3 justify-center flex-wrap">
+          <button onclick="goStep(8, true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">← 返回修改心得</button>
+          <button onclick="goStep(1, true)" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold px-5 py-2.5 rounded-lg min-h-[44px]">🔁 回到第一關檢視</button>
         </div>
       </div>
     </div>
@@ -297,42 +608,102 @@
     </div>
 
     <div class="bg-white rounded-2xl p-6 shadow-xl border-t-8 border-teal-600">
-      <div class="flex justify-between items-center mb-4">
+
+      <!-- 標題列 + 檢視模式切換 -->
+      <div class="flex justify-between items-center mb-4 flex-wrap gap-3">
         <h3 class="text-xl font-black text-teal-950">📊 學員進度總覽</h3>
-        <button onclick="loadStudents()" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-4 py-2 rounded-lg text-sm min-h-[44px]">🔄 重新整理</button>
+        <div class="flex items-center gap-2 flex-wrap">
+          <label for="filterDate" class="sr-only">篩選闖關日期</label>
+          <select id="filterDate" onchange="renderStudents()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm font-bold min-h-[44px]">
+            <option value="all">全部日期</option>
+          </select>
+          <div class="inline-flex rounded-lg overflow-hidden border-2 border-teal-600" role="group" aria-label="檢視模式切換">
+            <button id="viewBtnTable" onclick="setTeacherView('table')" class="view-btn active bg-white text-teal-800 font-bold px-3 py-2 text-sm min-h-[44px]">📋 表格</button>
+            <button id="viewBtnList"  onclick="setTeacherView('list')"  class="view-btn bg-white text-teal-800 font-bold px-3 py-2 text-sm min-h-[44px] border-l-2 border-teal-600">📝 清單</button>
+            <button id="viewBtnCard"  onclick="setTeacherView('card')"  class="view-btn bg-white text-teal-800 font-bold px-3 py-2 text-sm min-h-[44px] border-l-2 border-teal-600">🖼️ 圖卡</button>
+          </div>
+          <button onclick="loadStudents()" class="bg-teal-600 hover:bg-teal-500 text-white font-bold px-4 py-2 rounded-lg text-sm min-h-[44px]">🔄 重新整理</button>
+        </div>
       </div>
-      <div class="overflow-x-auto">
+
+      <!-- 統計摘要 -->
+      <div id="statBar" class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5"></div>
+
+      <!-- 圖卡模式專用：聚焦欄位（投影觀摩時只看某一題的成果） -->
+      <div id="cardFieldPicker" class="hidden mb-4 flex items-center gap-2 flex-wrap">
+        <span class="text-sm font-bold text-slate-600">聚焦欄位：</span>
+        <label for="cardField" class="sr-only">選擇要顯示的成果欄位</label>
+        <select id="cardField" onchange="renderStudents()" class="border border-slate-300 rounded-lg px-3 py-2 text-sm font-bold min-h-[44px]">
+          <option value="all">全部成果</option>
+          <option value="geminiResult">💎 Gemini 經營計畫</option>
+          <option value="claudeResult">📐 Claude 格式表格</option>
+          <option value="reflection">💭 反思心得</option>
+        </select>
+        <span class="text-xs text-slate-400">投影觀摩時，可只顯示某一項成果</span>
+      </div>
+
+      <!-- 檢視一：表格 -->
+      <div id="viewTable" class="overflow-x-auto">
         <table class="w-full text-sm text-left">
           <thead class="bg-teal-50 text-teal-900 font-black">
             <tr>
               <th class="p-2">日期</th><th class="p-2">姓名</th><th class="p-2">關卡</th>
-              <th class="p-2">經驗值</th><th class="p-2">完賽</th><th class="p-2">反思心得</th>
+              <th class="p-2">經驗值</th><th class="p-2">完賽</th>
+              <th class="p-2">Gemini計畫</th><th class="p-2">Claude表格</th><th class="p-2">反思心得</th>
             </tr>
           </thead>
           <tbody id="studentTableBody"></tbody>
         </table>
       </div>
+
+      <!-- 檢視二：清單 -->
+      <div id="viewList" class="hidden space-y-3"></div>
+
+      <!-- 檢視三：圖卡 -->
+      <div id="viewCard" class="hidden grid sm:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+
+      <p id="emptyHint" class="hidden text-center text-slate-400 font-bold py-10">目前沒有符合條件的闖關紀錄</p>
     </div>
   </section>
 
 </main>
 
-<footer class="text-center text-xs text-slate-400 py-6">車城國小資訊老師 @ Google Gemini 協作設計</footer>
+<footer class="text-center text-xs text-slate-400 py-6">
+  車城國小資訊老師 @ Google Gemini 協作設計
+  <span id="footerVersion" class="ml-2 font-bold"></span>
+</footer>
 
 <script>
 // ============================================================
+// 版本資訊（改版時只改這裡，標題徽章與頁尾會自動同步）
+// ============================================================
+const APP_VERSION = 'v2.0';
+const CHANGELOG = [
+  { version: 'v2.0', date: '2026-07-27', desc: '教師主控台新增「清單」與「圖卡」兩種檢視、成果詳情視窗、日期篩選與統計摘要；移除 Tailwind CDN 改為自建輕量 CSS（消除 production 警告）；進度圓點可點擊回顧；修正來回切換關卡導致經驗值灌水；學員輸入統一 HTML 跳脫；新增版本標示與本更新紀錄。' },
+  { version: 'v1.0', date: '2026-07-19', desc: '初版：九關卡（階段一 Gemini 生態系實戰五步驟／階段二 Claude 格式組裝／反思完賽）、智慧路由 API、雙 AI 後端代理、教師密碼保護。' }
+];
+
+// ============================================================
 // 全域設定
 // ============================================================
-// ⚠️⚠️⚠️ 這裡是網頁「無法連線」最常見的原因！
-// 下面這行還是原始佔位字串 YOUR_SCRIPT_ID，代表 GAS 部署後的正式網址
-// 從來沒有被換成真正的 Web App URL。只要這行沒改對，
-// 所有 JSONP / POST 呼叫都會失敗 → 觸發連線失敗橫幅 → 所有按鈕被鎖死。
-// 請到 GAS 專案「部署 > 管理部署作業」複製「網頁應用程式」網址，貼到下面：
+// GAS Web App 網址。若日後重新部署，必須到 GAS「部署 > 管理部署作業」
+// 複製新的「網頁應用程式」網址貼到這裡，否則所有 JSONP / POST 都會失敗。
 const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycby3i53qJgHR0JR0QyONkkojQQT8JySKxoRtIItBmwM0G2fCmzMGWv2SCc7wRBo0Z2C_yw/exec';
 
 const TOTAL_STEPS = 9;
+
+// 三個成果欄位的統一定義，表格/清單/圖卡三種檢視共用，日後要加欄位只改這裡
+const ANSWER_FIELDS = [
+  { key: 'geminiResult', label: 'Gemini 經營計畫', icon: '💎', mono: false },
+  { key: 'claudeResult', label: 'Claude 格式表格', icon: '📐', mono: true  },
+  { key: 'reflection',   label: '反思心得',        icon: '💭', mono: false }
+];
+
 let currentStudent = null; // { date, name, currentStep, xp, isCompleted, geminiResult, claudeResult, reflection }
 let pendingTeacherSwitch = false;
+let maxStepReached = 1;        // 學員已經到達過的最遠關卡，回顧舊關卡不會影響這個值
+let allStudents = [];          // 後端回傳的完整名單（快取，切換檢視不重打 API）
+let teacherViewMode = 'table'; // table | list | card
 
 // ============================================================
 // 車城標準：智慧路由通訊（JSONP 讀取 / Raw POST 寫入）
@@ -383,6 +754,45 @@ function showToast(msg, type) {
   toast.textContent = msg;
   container.appendChild(toast);
   setTimeout(() => toast.remove(), 3500);
+}
+
+// ------------------------------------------------------------
+// 安全工具：學員填的內容一律經過跳脫再放進 innerHTML，
+// 避免有人在心得或表格欄位貼入 HTML/JS 導致主控台版面被破壞。
+// Claude 表格欄位常含 Markdown 符號，這道處理特別重要。
+// ------------------------------------------------------------
+function escapeHtml(v) {
+  return (v === null || v === undefined ? '' : String(v))
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+
+// ============================================================
+// 版本紀錄
+// ============================================================
+function renderVersionUI() {
+  document.getElementById('versionBadge').textContent = APP_VERSION;
+  document.getElementById('footerVersion').textContent = APP_VERSION;
+  document.getElementById('changelogCurrent').textContent =
+    '目前版本：' + APP_VERSION + '（' + (CHANGELOG[0] ? CHANGELOG[0].date : '') + '）';
+
+  document.getElementById('changelogBody').innerHTML = CHANGELOG.map((c, i) => `
+    <div class="border border-slate-200 rounded-xl p-4 ${i === 0 ? 'bg-teal-50' : ''}">
+      <p class="font-black text-teal-800 mb-1">
+        ${escapeHtml(c.version)}
+        <span class="text-xs font-bold text-slate-400 ml-2">${escapeHtml(c.date)}</span>
+        ${i === 0 ? '<span class="text-xs bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full ml-2">最新</span>' : ''}
+      </p>
+      <p class="text-sm text-slate-700 leading-relaxed">${escapeHtml(c.desc)}</p>
+    </div>`).join('');
+}
+
+function openChangelogModal() {
+  document.getElementById('changelogModal').classList.remove('hidden');
+}
+
+function closeChangelogModal() {
+  document.getElementById('changelogModal').classList.add('hidden');
 }
 
 // ============================================================
@@ -466,6 +876,7 @@ function enterQuest() {
   document.getElementById('loginSection').classList.add('hidden');
   document.getElementById('questSection').classList.remove('hidden');
   restoreFieldsFromServer();
+  maxStepReached = currentStudent.currentStep || 1;
   renderProgress();
   goStep(currentStudent.currentStep || 1, /*skipSave*/true);
 }
@@ -479,29 +890,54 @@ function restoreFieldsFromServer() {
   if (currentStudent.reflection) document.getElementById('reflection').value = currentStudent.reflection;
 }
 
+// 一次收集三個成果欄位。任何切換關卡的動作都送出全部內容，
+// 因此前進、回顧、來回修改都不會遺失任何一關已填的資料。
+function collectCurrentFields() {
+  return {
+    geminiResult: document.getElementById('geminiResult').value,
+    claudeResult: document.getElementById('claudeResult').value,
+    reflection: document.getElementById('reflection').value
+  };
+}
+
 function renderProgress() {
   document.getElementById('xpDisplay').textContent = (currentStudent.xp || 0) + ' XP';
   const dotsEl = document.getElementById('stepDots');
+  dotsEl.setAttribute('aria-valuenow', Math.min(currentStudent.currentStep || 1, TOTAL_STEPS));
   dotsEl.innerHTML = '';
   for (let i = 1; i <= TOTAL_STEPS; i++) {
     const dot = document.createElement('div');
     dot.className = 'step-dot w-8 h-8 rounded-full flex items-center justify-center font-bold text-sm bg-slate-200 text-slate-500';
-    if (i < currentStudent.currentStep) dot.classList.add('done');
+    if (i < maxStepReached) dot.classList.add('done');
     if (i === currentStudent.currentStep) dot.classList.add('active');
+    if (i <= maxStepReached) {
+      dot.classList.add('cursor-pointer');
+      dot.title = '回顧第 ' + i + ' 關';
+      dot.setAttribute('role', 'button');
+      dot.setAttribute('tabindex', '0');
+      dot.setAttribute('aria-label', '回顧第 ' + i + ' 關');
+      dot.addEventListener('click', () => goStep(i, true));
+      dot.addEventListener('keydown', (ev) => {
+        if (ev.key === 'Enter' || ev.key === ' ') { ev.preventDefault(); goStep(i, true); }
+      });
+    }
     dot.textContent = i;
     dotsEl.appendChild(dot);
   }
 }
 
+// 純畫面切換。回顧舊關卡時會先把目前三個欄位存回後端，但不加也不扣經驗值。
 function goStep(step, skipSave) {
   document.querySelectorAll('.quest-step').forEach(el => el.classList.add('hidden'));
   const target = document.querySelector(`.quest-step[data-step="${step}"]`);
   if (target) target.classList.remove('hidden');
   if (currentStudent) {
+    const isBacktrack = step < currentStudent.currentStep;
     currentStudent.currentStep = step;
     renderProgress();
-    if (!skipSave) persistProgress({});
+    if (!skipSave || isBacktrack) persistProgress(collectCurrentFields());
   }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 function persistProgress(fieldData) {
@@ -510,7 +946,7 @@ function persistProgress(fieldData) {
     action: 'updateProgress',
     date: currentStudent.date,
     name: currentStudent.name,
-    step: currentStudent.currentStep,
+    step: maxStepReached,
     xp: currentStudent.xp,
     isCompleted: currentStudent.isCompleted || false,
     fieldData
@@ -519,33 +955,43 @@ function persistProgress(fieldData) {
   }).catch(() => showConnectionError());
 }
 
-// xpAmount 可省略，預設 +100；階段一的敘事型關卡用較小的 +50，
-// 完成階段一時另外用 completeStageOne() 給一次性大獎勵。
-function saveStepAndGo(nextStep, fieldData, xpAmount) {
-  currentStudent.xp = (currentStudent.xp || 0) + (xpAmount === undefined ? 100 : xpAmount);
+// xpAmount 可省略，預設 +100；階段一的敘事型關卡用較小的 +50。
+// 只有第一次「真正前進」到更後面的關卡才加經驗值、更新 maxStepReached，
+// 回顧舊關卡後再按下一關不會重複加分或蓋掉已到達的進度。
+function saveStepAndGo(nextStep, xpAmount) {
+  const isNewProgress = nextStep > maxStepReached;
+  if (isNewProgress) {
+    currentStudent.xp = (currentStudent.xp || 0) + (xpAmount === undefined ? 100 : xpAmount);
+    maxStepReached = nextStep;
+  }
   currentStudent.currentStep = nextStep;
-  persistProgress(fieldData);
+  persistProgress(collectCurrentFields());
   renderProgress();
   goStep(nextStep, true);
 }
 
 // 完成《階段一：基地架設與 Google 生態系跨載具實戰》的專屬里程碑，
-// 給一次大量經驗值獎勵，並用彈跳訊息公告解鎖稱號與徽章。
+// 給一次大量經驗值獎勵（只給一次），並用彈跳訊息公告解鎖稱號與徽章。
 function completeStageOne() {
-  currentStudent.xp = (currentStudent.xp || 0) + 1000;
+  const isNewProgress = 7 > maxStepReached;
+  if (isNewProgress) {
+    currentStudent.xp = (currentStudent.xp || 0) + 1000;
+    maxStepReached = 7;
+    showToast('🎉 解鎖稱號：👑雲端生態系架構師｜獲得徽章：☁️雲端傳送門（+1000 XP）', 'success');
+  }
   currentStudent.currentStep = 7;
-  persistProgress({});
+  persistProgress(collectCurrentFields());
   renderProgress();
   goStep(7, true);
-  showToast('🎉 解鎖稱號：👑雲端生態系架構師｜獲得徽章：☁️雲端傳送門（+1000 XP）', 'success');
 }
 
 function finishQuest() {
-  const reflection = document.getElementById('reflection').value.trim();
+  const isFirstFinish = !currentStudent.isCompleted;
   currentStudent.isCompleted = true;
-  currentStudent.xp = (currentStudent.xp || 0) + 100;
+  if (isFirstFinish) currentStudent.xp = (currentStudent.xp || 0) + 100;
   currentStudent.currentStep = 9;
-  persistProgress({ reflection });
+  maxStepReached = Math.max(maxStepReached, 9);
+  persistProgress(collectCurrentFields());
   renderProgress();
   document.getElementById('finalXpDisplay').textContent = currentStudent.xp + ' XP';
   goStep(9, true);
@@ -553,7 +999,7 @@ function finishQuest() {
 }
 
 // ============================================================
-// 雙 AI 呼叫
+// 雙 AI 呼叫（備用代打，API Key 只存在 GAS 後端）
 // ============================================================
 function setBtnLoading(loadingId, loading) {
   document.getElementById(loadingId).classList.toggle('hidden', !loading);
@@ -600,10 +1046,10 @@ function loadTeacherPanel() {
 
 function handleSaveSettings() {
   const studentUrl = document.getElementById('settingQr').value.trim();
-  const settings = {};
-  if (studentUrl) {
-    settings.qrCodeUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(studentUrl);
-  }
+  if (!studentUrl) { showToast('請先輸入學生端網址', 'error'); return; }
+  const settings = {
+    qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + encodeURIComponent(studentUrl)
+  };
   callGAS_POST({ action: 'saveSettings', settings })
     .then(res => {
       if (!res.ok) { showToast(res.message || '儲存失敗', 'error'); return; }
@@ -613,21 +1059,217 @@ function handleSaveSettings() {
     .catch(() => showConnectionError());
 }
 
+// 只打一次 API，之後切換檢視/篩選都用本地快取渲染
 function loadStudents() {
   callGAS_JSONP({ action: 'getStudents' }, (err, res) => {
     if (err) { showConnectionError(); return; }
-    const tbody = document.getElementById('studentTableBody');
-    tbody.innerHTML = '';
-    (res.data || []).forEach(s => {
-      const tr = document.createElement('tr');
-      tr.className = 'border-b';
-      tr.innerHTML = `<td class="p-2">${s.date}</td><td class="p-2">${s.name}</td>
-        <td class="p-2">${s.currentStep}/${TOTAL_STEPS}</td><td class="p-2">${s.xp}</td>
-        <td class="p-2">${s.isCompleted ? '✅' : '—'}</td>
-        <td class="p-2 max-w-xs truncate" title="${(s.reflection||'').replace(/"/g,'&quot;')}">${s.reflection || ''}</td>`;
-      tbody.appendChild(tr);
-    });
+    allStudents = res.data || [];
+    buildDateFilter();
+    renderStudents();
   });
+}
+
+// 依實際資料產生日期下拉（保留老師目前的選擇）
+function buildDateFilter() {
+  const sel = document.getElementById('filterDate');
+  const prev = sel.value;
+  const dates = [...new Set(allStudents.map(s => s.date).filter(Boolean))].sort().reverse();
+  sel.innerHTML = '<option value="all">全部日期</option>' +
+    dates.map(d => `<option value="${escapeHtml(d)}">${escapeHtml(d)}</option>`).join('');
+  sel.value = (dates.includes(prev) || prev === 'all') ? prev : 'all';
+}
+
+function getFilteredStudents() {
+  const d = document.getElementById('filterDate').value;
+  const list = (d && d !== 'all') ? allStudents.filter(s => s.date === d) : allStudents.slice();
+  // 經驗值高者在前，方便投影時直接看到完成度最高的成果
+  return list.sort((a, b) => (Number(b.xp) || 0) - (Number(a.xp) || 0) ||
+    String(a.name || '').localeCompare(String(b.name || ''), 'zh-Hant'));
+}
+
+function setTeacherView(mode) {
+  teacherViewMode = mode;
+  ['Table', 'List', 'Card'].forEach(m => {
+    document.getElementById('viewBtn' + m).classList.toggle('active', m.toLowerCase() === mode);
+  });
+  renderStudents();
+}
+
+function renderStudents() {
+  const list = getFilteredStudents();
+  const empty = list.length === 0;
+
+  document.getElementById('viewTable').classList.toggle('hidden', teacherViewMode !== 'table' || empty);
+  document.getElementById('viewList').classList.toggle('hidden', teacherViewMode !== 'list' || empty);
+  document.getElementById('viewCard').classList.toggle('hidden', teacherViewMode !== 'card' || empty);
+  document.getElementById('cardFieldPicker').classList.toggle('hidden', teacherViewMode !== 'card' || empty);
+  document.getElementById('emptyHint').classList.toggle('hidden', !empty);
+
+  renderStatBar(list);
+  if (empty) return;
+
+  if (teacherViewMode === 'table') renderTableView(list);
+  else if (teacherViewMode === 'list') renderListView(list);
+  else renderCardView(list);
+}
+
+function renderStatBar(list) {
+  const total = list.length;
+  const done = list.filter(s => s.isCompleted).length;
+  const avgXp = total ? Math.round(list.reduce((sum, s) => sum + (Number(s.xp) || 0), 0) / total) : 0;
+
+  // 顏色寫成完整 class 名稱，對應 head 自建 CSS 中已定義的規則
+  const stats = [
+    { label: '學員人數',   value: total,         box: 'bg-teal-50 border-teal-200',     t1: 'text-teal-700',   t2: 'text-teal-900' },
+    { label: '已完賽',     value: done,          box: 'bg-green-50 border-green-200',   t1: 'text-green-700',  t2: 'text-green-900' },
+    { label: '進行中',     value: total - done,  box: 'bg-amber-50 border-amber-200',   t1: 'text-amber-700',  t2: 'text-amber-900' },
+    { label: '平均經驗值', value: avgXp + ' XP', box: 'bg-purple-50 border-purple-200', t1: 'text-purple-700', t2: 'text-purple-900' }
+  ];
+
+  document.getElementById('statBar').innerHTML = stats.map(s => `
+    <div class="${s.box} border rounded-xl p-3 text-center">
+      <p class="text-xs font-bold ${s.t1}">${s.label}</p>
+      <p class="text-2xl font-black ${s.t2}">${escapeHtml(s.value)}</p>
+    </div>`).join('');
+}
+
+// ------------------------------------------------------------
+// 檢視一：表格（快速掃描全班進度）
+// ------------------------------------------------------------
+function renderTableView(list) {
+  document.getElementById('studentTableBody').innerHTML = list.map(s => {
+    const step = Math.min(Number(s.currentStep) || 1, TOTAL_STEPS);
+    const cells = ANSWER_FIELDS.map(f => {
+      const v = escapeHtml(s[f.key]);
+      return `<td class="p-2 max-w-xs truncate" title="${v}">${v}</td>`;
+    }).join('');
+    return `<tr class="border-b hover:bg-teal-50">
+      <td class="p-2">${escapeHtml(s.date)}</td>
+      <td class="p-2 font-bold">${escapeHtml(s.name)}</td>
+      <td class="p-2">${step}/${TOTAL_STEPS}</td>
+      <td class="p-2">${escapeHtml(s.xp)}</td>
+      <td class="p-2">${s.isCompleted ? '✅' : '—'}</td>
+      ${cells}
+    </tr>`;
+  }).join('');
+}
+
+// ------------------------------------------------------------
+// 檢視二：清單（一人一列大卡，逐一檢視用）
+// ------------------------------------------------------------
+function renderListView(list) {
+  document.getElementById('viewList').innerHTML = list.map((s, idx) => {
+    const step = Math.min(Number(s.currentStep) || 1, TOTAL_STEPS);
+    const pct = Math.round((step / TOTAL_STEPS) * 100);
+
+    const answers = ANSWER_FIELDS.map(f => {
+      if (!s[f.key]) return '';
+      return `<div class="min-w-0">
+        <p class="text-xs font-black text-slate-500 mb-0.5">${f.icon} ${f.label}</p>
+        <p class="text-sm text-slate-700 clamp-2 break-words ${f.mono ? 'font-mono' : ''}">${escapeHtml(s[f.key])}</p>
+      </div>`;
+    }).filter(Boolean).join('');
+
+    return `<div class="border border-slate-200 rounded-xl p-4 hover:border-teal-400 hover:shadow-md transition">
+      <div class="flex items-center justify-between gap-3 flex-wrap mb-3">
+        <div class="flex items-center gap-3">
+          <span class="w-9 h-9 rounded-full bg-teal-700 text-white font-black flex items-center justify-center text-sm shrink-0">${idx + 1}</span>
+          <div>
+            <p class="font-black text-slate-800">${escapeHtml(s.name)}
+              ${s.isCompleted ? '<span class="ml-1 text-xs bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full">✅ 完賽</span>' : ''}
+            </p>
+            <p class="text-xs text-slate-400 font-bold">${escapeHtml(s.date)}</p>
+          </div>
+        </div>
+        <div class="flex items-center gap-3">
+          <div class="w-32">
+            <div class="h-2 bg-slate-200 rounded-full overflow-hidden">
+              <div class="h-full bg-teal-500" style="width:${pct}%"></div>
+            </div>
+            <p class="text-xs text-slate-400 font-bold mt-1 text-right">第 ${step}/${TOTAL_STEPS} 關</p>
+          </div>
+          <p class="text-lg font-black text-teal-700 whitespace-nowrap">${escapeHtml(s.xp)} XP</p>
+        </div>
+      </div>
+      ${answers
+        ? `<div class="grid sm:grid-cols-2 gap-3 pt-3 border-t border-slate-100">${answers}</div>`
+        : '<p class="text-sm text-slate-400 pt-3 border-t border-slate-100">尚未填寫任何成果</p>'}
+      <button onclick="openDetailModal('${encodeURIComponent(s.date)}','${encodeURIComponent(s.name)}')" class="mt-3 text-sm font-bold text-teal-700 hover:text-teal-900 underline min-h-[44px]">看完整成果 →</button>
+    </div>`;
+  }).join('');
+}
+
+// ------------------------------------------------------------
+// 檢視三：圖卡（適合投影，全班一起觀摩彼此的成果）
+// ------------------------------------------------------------
+function renderCardView(list) {
+  const focus = document.getElementById('cardField').value;
+  const fields = focus === 'all' ? ANSWER_FIELDS : ANSWER_FIELDS.filter(f => f.key === focus);
+
+  document.getElementById('viewCard').innerHTML = list.map(s => {
+    const step = Math.min(Number(s.currentStep) || 1, TOTAL_STEPS);
+
+    const blocks = fields.map(f => {
+      const raw = s[f.key];
+      if (!raw) {
+        return `<div class="bg-slate-50 rounded-lg p-3">
+          <p class="text-xs font-black text-slate-400 mb-1">${f.icon} ${f.label}</p>
+          <p class="text-sm text-slate-300 font-bold">尚未填寫</p>
+        </div>`;
+      }
+      return `<div class="bg-teal-50/60 rounded-lg p-3">
+        <p class="text-xs font-black text-teal-800 mb-1">${f.icon} ${f.label}</p>
+        <p class="text-sm text-slate-700 whitespace-pre-wrap break-words ${focus === 'all' ? 'clamp-4' : ''} ${f.mono ? 'font-mono' : ''}">${escapeHtml(raw)}</p>
+      </div>`;
+    }).join('');
+
+    return `<article class="bg-white border-2 border-slate-200 rounded-2xl p-5 shadow-sm hover:shadow-lg hover:border-teal-400 transition flex flex-col">
+      <div class="flex items-start justify-between gap-2 mb-3">
+        <div class="min-w-0">
+          <h4 class="font-black text-lg text-slate-800 truncate">${escapeHtml(s.name)}</h4>
+          <p class="text-xs text-slate-400 font-bold">${escapeHtml(s.date)}・第 ${step}/${TOTAL_STEPS} 關</p>
+        </div>
+        <div class="text-right shrink-0">
+          <p class="text-base font-black text-teal-700">${escapeHtml(s.xp)} XP</p>
+          ${s.isCompleted ? '<span class="text-xs bg-green-100 text-green-800 font-bold px-2 py-0.5 rounded-full">✅ 完賽</span>' : ''}
+        </div>
+      </div>
+      <div class="space-y-2 flex-grow">${blocks}</div>
+      <button onclick="openDetailModal('${encodeURIComponent(s.date)}','${encodeURIComponent(s.name)}')" class="mt-4 w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-2.5 rounded-lg text-sm min-h-[44px]">🔍 看完整成果</button>
+    </article>`;
+  }).join('');
+}
+
+// ------------------------------------------------------------
+// 詳情 Modal：清單/圖卡點擊後顯示未裁切的完整內容
+// ------------------------------------------------------------
+function openDetailModal(encDate, encName) {
+  const date = decodeURIComponent(encDate);
+  const name = decodeURIComponent(encName);
+  const s = allStudents.find(x => x.date === date && x.name === name);
+  if (!s) return;
+
+  const step = Math.min(Number(s.currentStep) || 1, TOTAL_STEPS);
+  document.getElementById('detailTitle').textContent = s.name;
+  document.getElementById('detailMeta').textContent =
+    `${s.date}・第 ${step}/${TOTAL_STEPS} 關・${s.xp || 0} XP${s.isCompleted ? '・✅ 已完賽' : ''}`;
+
+  document.getElementById('detailBody').innerHTML = ANSWER_FIELDS.map(f => {
+    const raw = s[f.key];
+    const body = !raw
+      ? '<p class="text-sm text-slate-300 font-bold">尚未填寫</p>'
+      : `<p class="text-sm text-slate-700 whitespace-pre-wrap break-words leading-relaxed ${f.mono ? 'font-mono' : ''}">${escapeHtml(raw)}</p>`;
+    return `<div class="border border-slate-200 rounded-xl p-4">
+      <p class="text-sm font-black text-teal-800 mb-2">${f.icon} ${f.label}</p>
+      ${body}
+    </div>`;
+  }).join('');
+
+  document.getElementById('detailModal').classList.remove('hidden');
+}
+
+function closeDetailModal() {
+  document.getElementById('detailModal').classList.add('hidden');
 }
 
 // ============================================================
@@ -635,15 +1277,21 @@ function loadStudents() {
 // ============================================================
 window.addEventListener('DOMContentLoaded', () => {
   document.getElementById('inputDate').value = todayStr();
+  renderVersionUI();
 
   const banner = document.getElementById('envBanner');
   if (location.hostname.includes('github.io')) {
-    banner.textContent = '✅ 目前運行於 GitHub Pages 正式環境';
+    banner.textContent = '✅ 目前運行於 GitHub Pages 正式環境（' + APP_VERSION + '）';
     banner.className = 'mb-5 p-3.5 rounded-xl text-xs font-black text-center border shadow-sm bg-green-50 text-green-700 border-green-200';
   } else {
-    banner.textContent = '🛠️ 目前運行於本機/測試環境';
+    banner.textContent = '🛠️ 目前運行於本機/測試環境（' + APP_VERSION + '）';
     banner.className = 'mb-5 p-3.5 rounded-xl text-xs font-black text-center border shadow-sm bg-amber-50 text-amber-700 border-amber-200';
   }
+
+  // Esc 關閉任一 Modal
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closeDetailModal(); closeChangelogModal(); }
+  });
 
   const saved = localStorage.getItem('dualai_student');
   if (saved) {
